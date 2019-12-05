@@ -4,7 +4,7 @@
 
 ## Download
 - dhcpcd
-- wget raw.githubusercontent.com/xylzq/archlinux/master/setup.sh
+- wget raw.githubusercontent.com/xylzq/arch/master/setup.sh
 
 ## Usage
 - 执行 bash setup.sh
