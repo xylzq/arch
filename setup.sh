@@ -83,6 +83,7 @@ configrue_drive(){
 	arch_chroot "pacman -S --noconfirm bumblebee -y"
         arch_chroot "systemctl enable bumblebeed"
         arch_chroot "pacman -S --noconfirm nvidia xf86-input-synaptics -y"        
+        arch_chroot "pacman -S --noconfirm nvidia linux-lts intel-ucode linux-headers -y"
 }
 
 #安装网络管理程序
