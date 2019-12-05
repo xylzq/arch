@@ -23,7 +23,7 @@ update_mirrorlist(){
 	curl -so ${tmpfile} ${url} 
 	sed -i 's/^#Server/Server/g' ${tmpfile}
 	mv -f ${tmpfile} /etc/pacman.d/mirrorlist;
-  pacman -Syy
+        pacman -Syy
 }
 #开始分区
 create_partitions(){
@@ -47,15 +47,15 @@ mount_partitions(){
 	print_title "mount_partitions"
 	mount /dev/sda3 /mnt
 	swapon /dev/sda2
-  mkdir /mnt/boot
+        mkdir /mnt/boot
 	mount /dev/sda1 /mnt/boot
 	lsblk
 }
 #最小安装
 install_baseSystem(){
 	print_title "install_baseSystem"
-  pacstrap /mnt base base-devel linux linux-firmware wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
-  pacman -Syu
+        pacstrap /mnt base base-devel linux linux-firmware wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
+        pacman -Syu
 }
 
 #生成标卷文件表
@@ -79,26 +79,26 @@ configure_system(){
 #安装驱动程序
 configrue_drive(){
 	print_title "configrue_drive"
-  arch_chroot "pacman -S --noconfirm xorg-server xorg-twm xorg-xclock xorg-server -y"
+        arch_chroot "pacman -S --noconfirm xorg-server xorg-twm xorg-xclock xorg-server -y"
 	arch_chroot "pacman -S --noconfirm bumblebee -y"
-  arch_chroot "systemctl enable bumblebeed"
-  arch_chroot "pacman -S --noconfirm nvidia xf86-input-synaptics -y"        
+        arch_chroot "systemctl enable bumblebeed"
+        arch_chroot "pacman -S --noconfirm nvidia xf86-input-synaptics -y"        
 }
 
 #安装网络管理程序
 configrue_networkmanager(){
-	print_title "configrue_networkmanager"
-  arch_chroot "pacman -S --noconfirm iw wireless_tools wpa_supplicant dialog netctl networkmanager networkmanager-openconnect rp-pppoe network-manager-applet net-tools -y"
-  arch_chroot "systemctl enable NetworkManager.service"      
+       print_title "configrue_networkmanager"
+       arch_chroot "pacman -S --noconfirm iw wireless_tools wpa_supplicant dialog netctl networkmanager networkmanager-openconnect rp-pppoe network-manager-applet net-tools -y"
+       arch_chroot "systemctl enable NetworkManager.service"      
 }
 
 #安装配置引导程序（efi引导的话，将grub改成grub-efi-x86_64 efibootmgr）
 configrue_bootloader(){
-	print_title "configrue_bootloader"
-	arch_chroot "pacman -S --noconfirm grub -y"
-	arch_chroot "grub-install --target=i386-pc /dev/sda"
-  #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=boot" (efi引导)
-  arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg" 
+       print_title "configrue_bootloader"
+       arch_chroot "pacman -S --noconfirm grub -y"
+       arch_chroot "grub-install --target=i386-pc /dev/sda"
+       #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=boot" (efi引导)
+       arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg" 
 }
 
 
@@ -119,14 +119,14 @@ configure_hostname(){
   
 #添加本地域名
 configure_username(){
-	print_title "configure_username"
-  read -p "Username [ex: archlinux]: " User
-  arch_chroot "pacman -S --noconfirm sudo zsh -y"
-  arch_chroot "useradd -m -g users -G wheel -s /bin/zsh $User"
-  arch_chroot "passwd $User"
-  arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers"
+        print_title "configure_username"
+        read -p "Username [ex: archlinux]: " User
+        arch_chroot "pacman -S --noconfirm sudo zsh -y"
+        arch_chroot "useradd -m -g users -G wheel -s /bin/zsh $User"
+        arch_chroot "passwd $User"
+        arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers"
 	#arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) NOPASSWD: ALL/\%wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers"
-  umount -R /mnt
+        umount -R /mnt
 	clear
 	print_title "install has been.please reboot ."
 }
