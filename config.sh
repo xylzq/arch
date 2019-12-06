@@ -23,7 +23,7 @@ configure_Chinese(){
         sudo sh -c 'sed -i 's/\# \Include = /etc/pacman.d/mirrorlist/\Include = /etc/pacman.d/mirrorlist/g' /etc/pacman.conf'
         sudo pacman -Syu --noconfirm
         #echo "LANG=zh_CN.UTF-8" >> /etc/locale.conf
-        mkdir ~/.xprofile
+        touch ~/.xprofile
 	sudo sh -c 'echo "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile'
  }
  
