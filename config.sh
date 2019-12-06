@@ -29,7 +29,7 @@ configure_Chinese(){
  
   #安装基本软件
  add_baseapplication(){
-       print_title "add_baseapplication"(){
+       print_title "add_baseapplication"
        sudo pacman -S --noconfirm pavucontrol alsa-utils pulseaudio pulseaudio-alsa -y
        sudo pacman -S --noconfirm nano gvfs ntfs-3g gvfs-mtp p7zip file-roller unrar netease-cloud-music wps-office ttf-wps-fonts leafpad -y
        sudo pacman -S --noconfirm vlc ark -y
