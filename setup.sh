@@ -126,7 +126,7 @@ configure_username(){
         arch_chroot "useradd -m -g users -G wheel -s /bin/zsh $User"
         arch_chroot "passwd $User"
         arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers"
-	#arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) NOPASSWD: ALL/\%wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers"
+	arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) NOPASSWD: ALL/\%wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers"
         umount -R /mnt
 	clear
 	print_title "install has been.please reboot ."
