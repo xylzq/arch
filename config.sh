@@ -75,7 +75,6 @@ configure_Chinese(){
       cd /usr/share/fonts/source-code-pro-medium-italic
       sudo bash install.sh
       cd
-      umount -R /mnt
       clear
       print_title "config has been.please reboot ."
   } 
