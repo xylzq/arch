@@ -23,7 +23,8 @@ configure_Chinese(){
         sudo sh -c 'sed -i 's/\# \Include = /etc/pacman.d/mirrorlist/\Include = /etc/pacman.d/mirrorlist/g' /etc/pacman.conf'
         sudo pacman -Syu --noconfirm
         #echo "LANG=zh_CN.UTF-8" >> /etc/locale.conf
-        sudo sh -c 'echo "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile'
+        mkdir ~/.xprofile
+	sudo sh -c 'echo "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile'
  }
  
   #安装基本软件
@@ -42,8 +43,6 @@ configure_Chinese(){
   add_ChineseInput(){
        print_title "add_ChineseInput"
        sudo pacman -S --noconfirm fcitx fcitx-im fcitx-configtool -y
-       mkdir ~/.xprofile
-       mkdir ~/.bashrc
        sudo sh -c 'echo -e "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.xprofile'
        sudo sh -c 'echo -e "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.bashrc'
   } 
