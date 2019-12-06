@@ -18,7 +18,7 @@
 - pacman -S kf5 kf5-aids plasma kdebase kdegraphics kde-l10n-zh_cn sddm
 - systemctl enable sddm
 ### - Gnome：
-- pacman -S gnome gnome-terminal gnome-tweak-tool gdm
+- pacman -S gnome gnome-terminal gnome-tweak-tool chrome-gnome-shell gdm
 - systemctl enable gdm
 ### - Xfce：
 - pacman -S xfce4 xfce4-goodies sddm
