@@ -24,7 +24,7 @@ configure_Chinese(){
         sudo pacman -Syu --noconfirm
         #echo "LANG=zh_CN.UTF-8" >> /etc/locale.conf
         touch ~/.xprofile
-	sudo sh -c 'echo "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile'
+	echo "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile
  }
  
   #安装基本软件
@@ -43,8 +43,8 @@ configure_Chinese(){
   add_ChineseInput(){
        print_title "add_ChineseInput"
        sudo pacman -S --noconfirm fcitx fcitx-im fcitx-configtool -y
-       sudo sh -c 'echo -e "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.xprofile'
-       sudo sh -c 'echo -e "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.bashrc'
+       echo -e "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.xprofile
+       echo -e "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.bashrc
   } 
    
       
@@ -59,7 +59,7 @@ configure_Chinese(){
       sudo bash install.sh
       cd
    } 
-   #安装zsh
+   #安装zsh(安装完zsh后好像会自动退出脚本，这样子的话，插件就得重启后自己复制输入了，不过问题不大，反正添加插件也得输入一下)
   add_zsh(){
       print_title "add_zsh"
       sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
