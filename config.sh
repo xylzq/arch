@@ -15,35 +15,36 @@ print_title() {
  #配置汉化
 configure_Chinese(){
 	print_title "configure_Chinese"
-        pacman -S archlinuxcn-keyring
-        echo "[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf
-        pacman -Syy
-        pacman -S --noconfirm archlinuxcn-keyring -y
-        sed -i 's/\# \[multilib]/\[multilib]/g' /etc/pacman.conf
-        sed -i 's/\# \Include = /etc/pacman.d/mirrorlist/\Include = /etc/pacman.d/mirrorlist/g' /etc/pacman.conf
-        pacman -Syu --noconfirm
+        sudo chmod 777 /etc/pacman.d/mirrorlist
+	sudo pacman -S archlinuxcn-keyring
+        sudo sh -c 'echo "[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf'
+        sudo pacman -Syy
+        sudo pacman -S --noconfirm archlinuxcn-keyring -y
+        sudo sh -c 'sed -i 's/\# \[multilib]/\[multilib]/g' /etc/pacman.conf'
+        sudo sh -c 'sed -i 's/\# \Include = /etc/pacman.d/mirrorlist/\Include = /etc/pacman.d/mirrorlist/g' /etc/pacman.conf'
+        sudo pacman -Syu --noconfirm
         #echo "LANG=zh_CN.UTF-8" >> /etc/locale.conf
-        echo "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile
+        sudo sh -c 'echo "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile'
  }
  
   #安装基本软件
  add_baseapplication(){
        print_title "add_baseapplication"(){
-       pacman -S --noconfirm pavucontrol alsa-utils pulseaudio pulseaudio-alsa -y
-       pacman -S --noconfirm nano gvfs ntfs-3g gvfs-mtp p7zip file-roller unrar netease-cloud-music wps-office ttf-wps-fonts leafpad -y
-       pacman -S --noconfirm vlc ark -y
-       pacman -S --noconfirm firefox firefox-i18n-zh-cn -y
-       pacman -S --noconfirm git wget yaourt yay fakeroot -y
-       systemctl start alsa-state.service
-       systemctl enable alsa-state.service
+       sudo pacman -S --noconfirm pavucontrol alsa-utils pulseaudio pulseaudio-alsa -y
+       sudo pacman -S --noconfirm nano gvfs ntfs-3g gvfs-mtp p7zip file-roller unrar netease-cloud-music wps-office ttf-wps-fonts leafpad -y
+       sudo pacman -S --noconfirm vlc ark -y
+       sudo pacman -S --noconfirm firefox firefox-i18n-zh-cn -y
+       sudo pacman -S --noconfirm git wget yaourt yay fakeroot -y
+       sudo systemctl start alsa-state.service
+       sudo systemctl enable alsa-state.service
  }
  
    #安装中文输入法
   add_ChineseInput(){
        print_title "add_baseapplication"
-       pacman -S --noconfirm fcitx fcitx-im fcitx-configtool -y
-       echo "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.xprofile
-       echo "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.bashrc
+       sudo pacman -S --noconfirm fcitx fcitx-im fcitx-configtool -y
+       sudo sh -c 'echo "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.xprofile'
+       sudo sh -c 'echo "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.bashrc'
   } 
    
    #安装zsh
@@ -63,9 +64,9 @@ configure_Chinese(){
       yaourt -S --noconfirm gtk-theme-arc-git numix-circle-icon-theme-git
       git clone https://github.com/powerline/fonts.git --depth=1
       mv fonts source-code-pro-medium-italic
-      mv source-code-pro-medium-italic /usr/share/fonts/
+      sudo mv source-code-pro-medium-italic /usr/share/fonts/
       cd /usr/share/fonts/source-code-pro-medium-italic
-      bash install.sh
+      sudo bash install.sh
       cd
       umount -R /mnt
       clear
