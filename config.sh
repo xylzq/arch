@@ -69,7 +69,7 @@ configure_Chinese(){
       git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
       git clone https://github.com/zsh-users/zsh-autosuggestions
       cd
-      
+      zsh
 # nano ~/.zshrc,将主题改成：ZSH_THEME="agnoster" （zsh-syntax-highlighting必须放最下面。这个不会写，只能这样子备注了，重启后照着这个改就好了）
 #加入插件，即在plugins=(git)加入插件名字，改成
 #     plugins=(
