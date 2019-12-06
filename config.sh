@@ -16,7 +16,7 @@ print_title() {
 configure_Chinese(){
 	print_title "configure_Chinese"
         sudo chmod 777 /etc/pacman.d/mirrorlist
-        sudo sh -c 'echo "[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf'
+        sudo sh -c 'echo -e "[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf'
         sudo pacman -Syy
         sudo pacman -S --noconfirm archlinuxcn-keyring -y
         sudo sh -c 'sed -i 's/\# \[multilib]/\[multilib]/g' /etc/pacman.conf'
@@ -42,8 +42,10 @@ configure_Chinese(){
   add_ChineseInput(){
        print_title "add_ChineseInput"
        sudo pacman -S --noconfirm fcitx fcitx-im fcitx-configtool -y
-       sudo sh -c 'echo "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.xprofile'
-       sudo sh -c 'echo "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.bashrc'
+       mkdir ~/.xprofile
+       mkdir ~/.bashrc
+       sudo sh -c 'echo -e "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.xprofile'
+       sudo sh -c 'echo -e "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.bashrc'
   } 
    
       
@@ -62,6 +64,7 @@ configure_Chinese(){
   add_zsh(){
       print_title "add_zsh"
       sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+      mkdir ~/.oh-my-zsh/custom/plugins/
       cd ~/.oh-my-zsh/custom/plugins/
       git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
       git clone https://github.com/zsh-users/zsh-autosuggestions
