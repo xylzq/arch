@@ -56,9 +56,16 @@ configure_Chinese(){
       git clone https://github.com/zsh-users/zsh-autosuggestions
       cd
       zsh
-  }  
+  } 
+# nano ~/.zshrc,将主题改成：ZSH_THEME="agnoster" （zsh-syntax-highlighting必须放最下面。这个不会写，只能这样子备注了，重启后照着这个改就好了）
+#加入插件，即在plugins=(git)加入插件名字，改成
+#     plugins=(
+#       git
+#       zsh-autosuggestions
+#       zsh-syntax-highlighting               
+#      )                          
    
-   #安装系统图标字体主题包
+   #安装系统图标字体主题包（重启后把shell,gtk.图标等改成这些就好了）
   add_theme(){
       print_title "add_theme"
       yaourt -S --noconfirm gtk-theme-arc-git numix-circle-icon-theme-git
