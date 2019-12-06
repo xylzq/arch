@@ -30,7 +30,6 @@
 - 将greeter-session=example-gtk-gnome改为greeter-session=lightdm-deepin-greeter
 
 
-
 # archlinux config script
 
 关于arch配置美化的一个脚本
@@ -46,6 +45,6 @@
 - 一些必要软件如压缩，挂载，声音管理器
 - 一些实用软件如文档管理器，播放器，网易云音乐，wps,火狐浏览器等
 - 大家可根据需要自由增减
-- 安装完zsh后脚本会自动退出，所有zsh的配置脚本无法运行，大家可以手动操作脚本的内容
+- 安装完zsh后脚本会自动退出，所以zsh的配置脚本无法运行，大家可以手动操作脚本的内容
 
 
