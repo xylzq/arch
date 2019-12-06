@@ -63,20 +63,19 @@ configure_Chinese(){
   add_zsh(){
       print_title "add_zsh"
       sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-      mkdir ~/.oh-my-zsh/custom/plugins/
-      cd ~/.oh-my-zsh/custom/plugins/
-      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-      git clone https://github.com/zsh-users/zsh-autosuggestions
-      cd
-      zsh
-# nano ~/.zshrc,将主题改成：ZSH_THEME="agnoster" （zsh-syntax-highlighting必须放最下面。这个不会写，只能这样子备注了，重启后照着这个改就好了）
-#加入插件，即在plugins=(git)加入插件名字，改成
-#     plugins=(
+#    nano ~/.zshrc,将主题改成：ZSH_THEME="agnoster" （zsh-syntax-highlighting必须放最下面。这个不会写，只能这样子备注了，重启后照着这个改就好了）
+#    下载命令补全以及高亮插件
+#    cd ~/.oh-my-zsh/custom/plugins/
+#    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+#    git clone https://github.com/zsh-users/zsh-autosuggestions
+#    加入插件，即 nano ~/.zshrc 在 plugins=(git) 上加入插件名字，改成
+#    plugins=(
 #       git
 #       zsh-autosuggestions
 #       zsh-syntax-highlighting               
 #      )                          
-
+      cd
+      zsh
       clear
       print_title "config has been.please reboot ."
   } 
