@@ -29,6 +29,8 @@
 - nano /etc/lightdm/lightdm.conf
 - 将greeter-session=example-gtk-gnome改为greeter-session=lightdm-deepin-greeter
 
+
+
 # archlinux config script
 
 关于arch配置美化的一个脚本
