@@ -16,7 +16,6 @@ print_title() {
 configure_Chinese(){
 	print_title "configure_Chinese"
         sudo chmod 777 /etc/pacman.d/mirrorlist
-	sudo pacman -S archlinuxcn-keyring
         sudo sh -c 'echo "[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf'
         sudo pacman -Syy
         sudo pacman -S --noconfirm archlinuxcn-keyring -y
@@ -41,30 +40,13 @@ configure_Chinese(){
  
    #安装中文输入法
   add_ChineseInput(){
-       print_title "add_baseapplication"
+       print_title "add_ChineseInput"
        sudo pacman -S --noconfirm fcitx fcitx-im fcitx-configtool -y
        sudo sh -c 'echo "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.xprofile'
        sudo sh -c 'echo "export GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=“@im=fcitx”" >> ~/.bashrc'
   } 
    
-   #安装zsh
-  add_zsh(){
-      print_title "add_zsh"
-      sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-      cd ~/.oh-my-zsh/custom/plugins/
-      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-      git clone https://github.com/zsh-users/zsh-autosuggestions
-      cd
-      zsh
-  } 
-# nano ~/.zshrc,将主题改成：ZSH_THEME="agnoster" （zsh-syntax-highlighting必须放最下面。这个不会写，只能这样子备注了，重启后照着这个改就好了）
-#加入插件，即在plugins=(git)加入插件名字，改成
-#     plugins=(
-#       git
-#       zsh-autosuggestions
-#       zsh-syntax-highlighting               
-#      )                          
-   
+      
    #安装系统图标字体主题包（重启后把shell,gtk.图标等改成这些就好了）
   add_theme(){
       print_title "add_theme"
@@ -75,6 +57,24 @@ configure_Chinese(){
       cd /usr/share/fonts/source-code-pro-medium-italic
       sudo bash install.sh
       cd
+   } 
+   #安装zsh
+  add_zsh(){
+      print_title "add_zsh"
+      sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+      cd ~/.oh-my-zsh/custom/plugins/
+      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+      git clone https://github.com/zsh-users/zsh-autosuggestions
+      cd
+      
+# nano ~/.zshrc,将主题改成：ZSH_THEME="agnoster" （zsh-syntax-highlighting必须放最下面。这个不会写，只能这样子备注了，重启后照着这个改就好了）
+#加入插件，即在plugins=(git)加入插件名字，改成
+#     plugins=(
+#       git
+#       zsh-autosuggestions
+#       zsh-syntax-highlighting               
+#      )                          
+
       clear
       print_title "config has been.please reboot ."
   } 
@@ -82,5 +82,5 @@ configure_Chinese(){
   configure_Chinese
   add_baseapplication
   add_ChineseInput
-  add_zsh
   add_theme
+  add_zsh
