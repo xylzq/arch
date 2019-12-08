@@ -28,9 +28,9 @@ update_mirrorlist(){
 #开始分区
 create_partitions(){
 	print_title "create_partitions"
-	lvcreate -L 525M xylzq -n boot_lv
-	lvcreate -L 8G xylzq -n swap_lv
-	lvcreate -l +100%FREE xylzq -n root_lv
+	lvcreate -L 525M lv -n boot
+	lvcreate -L 8G lv -n swap
+	lvcreate -l +100%FREE lv -n root
 }
 #开始格式化
 format_partitions(){
@@ -38,17 +38,17 @@ format_partitions(){
         modprobe dm-mod
         vgscan
         vgchange -ay
-        mkfs.vfat -F32 /dev/mapprt/xylzq-boot_lv 
-	mkswap /dev/mapper/xylzq-swap_lv 
-	mkfs.ext4 /dev/mapper/xylzq-root_lv 
+        mkfs.vfat -F32 /dev/mapprt/lv-boot 
+	mkswap /dev/mapper/lv-swap 
+	mkfs.ext4 /dev/mapper/lv-root 
 }
 #挂载分区
 mount_partitions(){
 	print_title "mount_partitions"
-	mount /dev/mapper/xylzq-root_lv /mnt
-        swapon /dev/mapper/xylzq-swap_lv
+	mount /dev/mapper/lv-root /mnt
+        swapon /dev/mapper/lv-swap
         mkdir /mnt/boot
-	mount /dev/mapprt/xylzq-boot_lv /mnt/boot
+	mount /dev/mapprt/lv-boot /mnt/boot
 	lsblk
 }
 #最小安装
