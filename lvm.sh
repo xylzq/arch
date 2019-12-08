@@ -35,10 +35,10 @@ create_partitions(){
 #开始格式化
 format_partitions(){
 	print_title "format_partitions"
-  modprobe dm-mod
-  vgscan
-  vgchange -ay
-  mkfs.vfat -F32 /dev/mapprt/xylzq-boot_lv 
+        modprobe dm-mod
+        vgscan
+        vgchange -ay
+        mkfs.vfat -F32 /dev/mapprt/xylzq-boot_lv 
 	mkswap /dev/mapper/xylzq-swap_lv 
 	mkfs.ext4 /dev/mapper/xylzq-root_lv 
 }
@@ -46,16 +46,16 @@ format_partitions(){
 mount_partitions(){
 	print_title "mount_partitions"
 	mount /dev/mapper/xylzq-root_lv /mnt
-  swapon /dev/mapper/xylzq-swap_lv
-  mkdir /mnt/boot
+        swapon /dev/mapper/xylzq-swap_lv
+        mkdir /mnt/boot
 	mount /dev/mapprt/xylzq-boot_lv /mnt/boot
 	lsblk
 }
 #最小安装
 install_baseSystem(){
 	print_title "install_baseSystem"
-  pacstrap /mnt base base-devel linux linux-firmware wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
-  pacman -Syu
+        pacstrap /mnt base base-devel linux linux-firmware wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
+        pacman -Syu
 }
 
 #生成标卷文件表
