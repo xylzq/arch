@@ -53,7 +53,7 @@ configure_hostname(){
 	fi
 	sed -i '/127.0.0.1/s/$/ '${host_name}'/' /etc/hosts
 	sed -i '/::1/s/$/ '${host_name}'/' /etc/hosts
-	passwd"
+	passwd
   }
   
 #添加本地域名
