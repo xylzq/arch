@@ -48,7 +48,7 @@ mount_partitions(){
         mkdir /mnt/boot
 	mount /dev/mapper/lv-boot /mnt/boot
 	lsblk
-
+}
 update_mirrorlist
 create_partitions
 format_partitions
