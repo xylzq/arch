@@ -40,7 +40,7 @@ format_partitions(){
         modprobe dm-mod
         vgscan
         vgchange -ay
-	mkfs.vfat -F32 /dev/lv-boot 
+	mkfs.vfat -F32 /dev/mapper/lv-boot 
 	mkswap /dev/mapper/lv-swap 
 	mkfs.ext4 /dev/mapper/lv-root 
 }
