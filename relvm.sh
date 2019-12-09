@@ -29,8 +29,8 @@ update_mirrorlist(){
 create_partitions(){
 	print_title "create_partitions"
 	parted -s /dev/sda mkpart primary ext4 2M 527M
-  parted -s /dev/sda mkpart primary ext4 4800M 100%
-  vgcreate lv /dev/sda2
+        parted -s /dev/sda mkpart primary ext4 527M 100%
+        vgcreate lv /dev/sda2
 	lvcreate -L 8G lv -n swap
 	lvcreate -l +100%FREE lv -n root
 }
