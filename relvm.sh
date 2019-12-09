@@ -28,6 +28,7 @@ update_mirrorlist(){
 #开始分区
 create_partitions(){
 	print_title "create_partitions"
+	parted -s /dev/sda mklabel msdos
 	parted -s /dev/sda mkpart primary ext4 2M 527M
         parted -s /dev/sda mkpart primary ext4 527M 100%
         vgcreate lv /dev/sda2
