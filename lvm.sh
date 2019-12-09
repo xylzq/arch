@@ -12,7 +12,7 @@ print_title() {
 	echo ""
 }
 arch_chroot() {
-	arch-chroot /mnt  -c "${1}"
+	arch-chroot /mnt /bin/bash -c "${1}"
 }
 
 #替换仓库列表
