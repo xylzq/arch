@@ -28,7 +28,8 @@ update_mirrorlist(){
 #开始分区
 create_partitions(){
 	print_title "create_partitions"
-	lvcreate -L 525M lv -n boot
+        parted -s /dev/sda mklabel msdos
+	parted -s /dev/sda mkpart primary ext4 1M 525M
 	lvcreate -L 8G lv -n swap
 	lvcreate -l +100%FREE lv -n root
 }
@@ -38,7 +39,7 @@ format_partitions(){
         modprobe dm-mod
         vgscan
         vgchange -ay
-        mkfs.vfat -F32 /dev/mapper/lv-boot 
+	mkfs.vfat -F32 /dev/sda1 
 	mkswap /dev/mapper/lv-swap 
 	mkfs.ext4 /dev/mapper/lv-root 
 }
@@ -48,7 +49,7 @@ mount_partitions(){
 	mount /dev/mapper/lv-root /mnt
         swapon /dev/mapper/lv-swap
         mkdir /mnt/boot
-	mount /dev/mapper/lv-boot /mnt/boot
+	mount /dev/sda1 /mnt/boot
 	lsblk
 }
 #最小安装
