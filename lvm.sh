@@ -28,12 +28,8 @@ update_mirrorlist(){
 #开始分区
 create_partitions(){
 	print_title "create_partitions"
-	parted -s /dev/sda mklabel msdos
-	parted -s /dev/sda mkpart primary ext4 2M 525M
-	parted -s /dev/sda mkpart primary ext4 525M 100%
-	vgcreate lv /dev/sda1 /dev/sda2
 	lvcreate -L 525M lv -n boot
-	lvcreate -L 4G lv -n swap
+	lvcreate -L 8G lv -n swap
 	lvcreate -l +100%FREE lv -n root
 }
 #开始格式化
@@ -59,8 +55,8 @@ mount_partitions(){
 #最小安装
 install_baseSystem(){
 	print_title "install_baseSystem"
-        pacstrap /mnt base base-devel linux linux-firmware wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
-        pacman -Syu
+        pacstrap /mnt base linux linux-firmware wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
+        pacman -Syu --noconfirm
 }
 
 #生成标卷文件表
