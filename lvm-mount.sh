@@ -11,20 +11,7 @@ print_title() {
 	print_line
 	echo ""
 }
-arch_chroot() {
-	arch-chroot /mnt /bin/bash -c "${1}"
-}
 
-#替换仓库列表
-update_mirrorlist(){
-	print_title "update_mirrorlist"
-	tmpfile=$(mktemp --suffix=-mirrorlist)	
-	url="https://www.archlinux.org/mirrorlist/?country=CN&protocol=http&protocol=https&ip_version=4"
-	curl -so ${tmpfile} ${url} 
-	sed -i 's/^#Server/Server/g' ${tmpfile}
-	mv -f ${tmpfile} /etc/pacman.d/mirrorlist;
-        pacman -Syy --noconfirm
-}
 #开始分区
 create_partitions(){
 	print_title "create_partitions"
@@ -54,3 +41,8 @@ mount_partitions(){
 	mount /dev/sda1 /mnt/boot
 	lsblk
 }
+
+update_mirrorlist
+create_partitions
+format_partitions
+mount_partitions
