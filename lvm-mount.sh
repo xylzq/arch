@@ -50,7 +50,7 @@ mount_partitions(){
 	mount /dev/mapper/lv-root /mnt
         swapon /dev/mapper/lv-swap
         mkdir /mnt/boot
-	mount /dev/sda1 /mnt/boot
+	mount /dev/mapper/lv-boot /mnt/boot
 	lsblk
 }
 
