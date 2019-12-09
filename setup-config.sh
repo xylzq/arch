@@ -45,11 +45,11 @@ configrue_networkmanager(){
 configure_hostname(){
 	print_title "configure_hostname"
 	read -p "Hostname [ex: archlinux]: " host_name
-	echo "$host_name" > /mnt/etc/hostname
-	if [[ ! -f /mnt/etc/hosts.aui ]]; then
-	cp /mnt/etc/hosts /mnt/etc/hosts.aui
+	echo "$host_name" > /etc/hostname
+	if [[ ! -f /etc/hosts.aui ]]; then
+	cp /etc/hosts /etc/hosts.aui
 	else
-	cp /mnt/etc/hosts.aui /mnt/etc/hosts
+	cp /etc/hosts.aui /etc/hosts
 	fi
 	sed -i '/127.0.0.1/s/$/ '${host_name}'/' /etc/hosts
 	sed -i '/::1/s/$/ '${host_name}'/' /etc/hosts
