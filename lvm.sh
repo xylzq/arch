@@ -28,9 +28,11 @@ update_mirrorlist(){
 #开始分区
 create_partitions(){
 	print_title "create_partitions"
-        parted -s /dev/sda mklabel msdos
+	parted -s /dev/sda mklabel msdos
 	parted -s /dev/sda mkpart primary ext4 1M 525M
-	lvcreate -L 8G lv -n swap
+	parted -s /dev/sda mkpart primary ext4 525M 100%
+	vgcreate lv /dev/sda2
+	lvcreate -L 4G lv -n swap
 	lvcreate -l +100%FREE lv -n root
 }
 #开始格式化
@@ -97,7 +99,7 @@ configrue_networkmanager(){
 #安装配置引导程序（efi引导的话，将grub改成grub-efi-x86_64 efibootmgr）
 configrue_bootloader(){
        print_title "configrue_bootloader"
-       arch_chroot "pacman -S --noconfirm grub -y"
+       arch_chroot "pacman -S --noconfirm grub lvm -y"
        arch_chroot "grub-install --target=i386-pc /dev/sda"
        #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=boot" (efi引导)
        arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg" 
