@@ -56,7 +56,6 @@ mount_partitions(){
 install_baseSystem(){
 	print_title "install_baseSystem"
         pacstrap /mnt base linux linux-firmware wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
-        pacman -Syu --noconfirm
 }
 
 #生成标卷文件表
