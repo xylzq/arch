@@ -1,3 +1,31 @@
+#!/bin/bash
+
+print_line() {
+	printf "%$(tput cols)s\n"|tr ' ' '-'
+}
+
+print_title() {
+	clear
+	print_line
+	echo -e "# ${Bold}$1${Reset}"
+	print_line
+	echo ""
+}
+arch_chroot() {
+	arch-chroot /mnt /bin/bash -c "${1}"
+}
+
+#替换仓库列表
+update_mirrorlist(){
+	print_title "update_mirrorlist"
+	tmpfile=$(mktemp --suffix=-mirrorlist)	
+	url="https://www.archlinux.org/mirrorlist/?country=CN&protocol=http&protocol=https&ip_version=4"
+	curl -so ${tmpfile} ${url} 
+	sed -i 's/^#Server/Server/g' ${tmpfile}
+	mv -f ${tmpfile} /etc/pacman.d/mirrorlist;
+        pacman -Syy --noconfirm
+}
+
 #最小安装
 install_baseSystem(){
 	print_title "install_baseSystem"
@@ -71,12 +99,11 @@ configure_username(){
 }
 
 
-
+update_mirrorlist
 install_baseSystem
 generate_fstab
 configure_system
 configrue_drive
 configrue_networkmanager
-configrue_bootloader
 configure_hostname
 configure_username
