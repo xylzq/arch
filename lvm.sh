@@ -102,6 +102,7 @@ configrue_bootloader(){
        arch_chroot "pacman -S --noconfirm grub lvm -y"
        arch_chroot "grub-install --target=i386-pc /dev/sda"
        #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=boot" (efi引导)
+       arch_chroot "cp /usr/share/locale/en\@quot/LC_MESSAGES/grub.mo /boot/grub/locale/en.mo"
        arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg" 
 }
 
