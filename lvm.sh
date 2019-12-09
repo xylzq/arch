@@ -29,9 +29,9 @@ update_mirrorlist(){
 create_partitions(){
 	print_title "create_partitions"
 	parted -s /dev/sda mklabel msdos
-	parted -s /dev/sda mkpart primary ext4 1M 525M
+	parted -s /dev/sda mkpart primary ext4 2M 525M
 	parted -s /dev/sda mkpart primary ext4 525M 100%
-	vgcreate lv /dev/sda2
+	vgcreate lv /dev/sda1 sda2
 	lvcreate -L 4G lv -n swap
 	lvcreate -l +100%FREE lv -n root
 }
