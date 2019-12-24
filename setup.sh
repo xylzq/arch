@@ -23,7 +23,7 @@ update_mirrorlist(){
 	curl -so ${tmpfile} ${url} 
 	sed -i 's/^#Server/Server/g' ${tmpfile}
 	mv -f ${tmpfile} /etc/pacman.d/mirrorlist;
-        pacman -Syy --noconfirm
+        #pacman -Syy --noconfirm
 }
 #开始分区
 create_partitions(){
