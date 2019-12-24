@@ -21,7 +21,7 @@ configure_Chinese(){
         sudo pacman -S --noconfirm archlinuxcn-keyring -y
         sudo sh -c 'sed -i 's/\# \[multilib]/\[multilib]/g' /etc/pacman.conf'
         sudo sh -c 'sed -i 's/\# \Include = /etc/pacman.d/mirrorlist/\Include = /etc/pacman.d/mirrorlist/g' /etc/pacman.conf'
-        sudo pacman -Syu --noconfirm
+        sudo pacman -Syy --noconfirm
         #echo "LANG=zh_CN.UTF-8" >> /etc/locale.conf
         touch ~/.xprofile
 	echo -e "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile
