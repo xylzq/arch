@@ -24,7 +24,7 @@ configure_Chinese(){
         sudo pacman -Syu --noconfirm
         #echo "LANG=zh_CN.UTF-8" >> /etc/locale.conf
         touch ~/.xprofile
-	echo "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile
+	echo -e "export LANG=zh_CN.UTF-8\nexport LANGUAGE=zh_CN:en_US" >> ~/.xprofile
  }
  
   #安装基本软件
