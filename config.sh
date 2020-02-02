@@ -19,8 +19,8 @@ configure_Chinese(){
         sudo sh -c 'echo -e "[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf'
         sudo pacman -Syy
         sudo pacman -S --noconfirm archlinuxcn-keyring -y
-        sudo sh -c 'sed -i 's/\# \[multilib]/\[multilib]/g' /etc/pacman.conf'
-        sudo sh -c 'sed -i 's/\# \Include = /etc/pacman.d/mirrorlist/\Include = /etc/pacman.d/mirrorlist/g' /etc/pacman.conf'
+        sudo sh -c "sed -i 's/\# \[multilib]/\[multilib]/g' /etc/pacman.conf"
+        sudo sh -c "sed -i 's/\# \Include = /etc/pacman.d/mirrorlist/\Include = /etc/pacman.d/mirrorlist/g' /etc/pacman.conf"
         sudo pacman -Syy --noconfirm
         #echo "LANG=zh_CN.UTF-8" >> /etc/locale.conf
         touch ~/.xprofile
