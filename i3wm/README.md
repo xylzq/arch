@@ -63,9 +63,9 @@ ip link show
 ```
 polybar example
 ```
-查看配置文件模板是否加载成功，也可按需求开启或者关闭某些模板。
+- 查看配置文件模板是否加载成功，也可按需求开启或者关闭某些模板。
 
-修改完成后，将[bar/example]改回[bar/mybar]
+- 修改完成后，将[bar/example]改回[bar/mybar]
 
 #### 2.mpd配置文件
 - 重启后音乐模块图标并没有显示是因为mpd默认目录里没有文件可通过修改.config/mpd/mpd.conf文件来改变这个路径。
