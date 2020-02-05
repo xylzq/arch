@@ -45,6 +45,7 @@ pacman -S ncmpcpp mpc
 pacman -S pavucontrol alsa-util pulseaudio pulseaudio-alsa
 ```
 - polybar依赖
+```
 pacman -S cmake git wget python python2 pkg-config
 pacman -S cairo xcb-util-image xcb-util-wm xcb-util-xrm xcb-util-cursor curl
 yaourt -S alsa-lib libmpdclient wireless_tools jsoncpp i3ipc-glib-git ttf-unifont siji-git
