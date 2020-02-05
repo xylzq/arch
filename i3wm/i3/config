@@ -9,8 +9,14 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
+# 设置循环变量
 # 设置Mod键，1-Alt;2-win
 set $mod Mod1
+# 设置方向键
+set $up k
+set $down j
+set $left h
+set $right l
 
 # 设置屏幕锁定
 bindsym $mod+l exec i3lock-fancy
@@ -107,16 +113,16 @@ bindsym $mod+d exec --no-startup-id rofi -show drun
 bindsym $mod+q exec --no-startup-id rofi -show window
 
 # change focus (改变焦点)
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+$Left focus left
+bindsym $mod+$Down focus down
+bindsym $mod+$Up focus up
+bindsym $mod+$Right focus right
 
 # move focused window（移动聚焦窗口）
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
 
 # alternatively, you can use the cursor keys（或者，可以使用光标键）
 bindsym $mod+Shift+Left move left
