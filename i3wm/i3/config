@@ -135,8 +135,8 @@ bindsym $mod+Shift+Right move right
 floating_modifier $mod 
 
 # split in horizontal orientation
-# 水平分裂（如：$mod+h+enter可在焦点右方新建一个终端）
-bindsym $mod+h split h
+# 水平分裂（如：$mod+g+enter可在焦点右方新建一个终端）
+bindsym $mod+g split h
 
 # split in vertical orientation
 # 垂直分裂（如：$mod+v+enter可在焦点下方新建一个终端）
