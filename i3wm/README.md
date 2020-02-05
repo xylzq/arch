@@ -17,13 +17,14 @@
 * *polybar* : 状态栏
 * *i3lock-fancy-git* : 锁屏
 * *mpd* : 音乐播放器守护程序
+* *rofi* : 程序启动项
 
 
 ### 安装
 
 #### 1.安装基础包
 ```
-pacman -S xfce4-terminal feh compton i3-gaps mpd base-devel yaourt
+pacman -S xfce4-terminal feh compton i3-gaps mpd rofi base-devel yaourt
 yaourt -S polybar-git i3lock-fancy-git
 ```
 #### 2.安装字体图标
