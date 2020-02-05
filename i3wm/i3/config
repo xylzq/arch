@@ -19,7 +19,7 @@ set $left h
 set $right l
 
 # 设置屏幕锁定
-bindsym $mod+l exec i3lock-fancy
+bindsym $mod+F12 exec i3lock-fancy
 
 #设置窗口边框等等
 new_window none
