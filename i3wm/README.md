@@ -34,7 +34,7 @@ pacman -S adobe-source-han-sans-tw-fonts
 pacman -S adobe-source-han-sans-jp-fonts
 pacman -S ttf-liberation
 yaourt -S otf-font-awesome
-yaourt -S ttf-material-icons 
+yaourt -S ttf-material-icons-git 
 ```
 #### 3.安装必要依赖
 - mpd依赖（i3配置文件中调节音乐所需）
@@ -43,7 +43,7 @@ pacman -S ncmpcpp mpc
 ```
 - alsaer依赖（i3配置文件中调节音量所需）
 ```
-pacman -S pavucontrol alsa-util pulseaudio pulseaudio-alsa
+pacman -S pavucontrol alsa-utils pulseaudio pulseaudio-alsa
 ```
 - polybar依赖
 ```
