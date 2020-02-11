@@ -9,6 +9,15 @@ export QT_IM_MOUDLE=fcitx
 export XMODIFIERS=@im=fcitx
 export VISUAL="vim"
 
+
+alias c='clear'
+# -s是说后缀以gz结尾的run tar这个命令
+alias -s gz='tar -xzvf'
+alias -s tgz='tar -xzvf'
+alias -s zip='unzip'
+alias -s bz2='tar -xjvf'
+
+
 #POWERLEVEL9K_MODE='awesome-fontconfig'
 POWERLEVEL9K_MODE='nerdfont-complete'
 ZSH_THEME="powerlevel9k/powerlevel9k"
@@ -47,6 +56,11 @@ POWERLEVEL9K_DIR_HOME_FOREGROUND="white"
 POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="white"
 POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="white"
 POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="black"
+
+#进入powerlevel9k/powerlevel9k主题文件，修改当前路径背景颜色
+#nano ~/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k.zsh-theme
+#将"$1_prompt_segment" "$0_${current_state}" "$2" "blue" "$DEFAULT_COLOR" "${current_path}" "${dir_states[$current_state]}"
+#改为 "$1_prompt_segment" "$0_${current_state}" "$2" "black" "$DEFAULT_COLOR" "${current_path}" "${dir_states[$current_state]}"
 
 #POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND="white"
 #POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND="black"
