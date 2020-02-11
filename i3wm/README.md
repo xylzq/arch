@@ -64,28 +64,40 @@ cd ~/.oh-my-zsh/custom/plugins
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git(高亮光标，修改插件配置时必须放最下面)
 git clone https://github.com/zsh-users/zsh-autosuggestions（命令补全插件）
 ```
+- oh-my-zsh 主题
+```
+sudo pacman -S zsh-theme-powerlevel9k
+
+#选择Powerlevel9k默认主题的话，也可自己配置
+#To enable Powerlevel9k theme for your user type:
+echo 'source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme' >> ~/.zshrc
+```
+- oh-my-zsh 字体
+```
+# nerd-fonts 含有大量字体图标，oh-my-zsh缺少则许多图标无法显示
+sudo pacman -S nerd-fonts-complete
+```
+- oh-my-zsh配置
 ```
 nano ~/.zshrc
+
+#强制指定终端色彩解决终端色彩不够256色问题
+export TERM="xterm-256color"
+
+#字体设定 (注意，字体设定必须放在主题之前）
+POWERLEVEL9K_MODE='nerdfont-complete'
+
+#主题设定
+ZSH_THEME="powerlevel9k/powerlevel9k"
+
+#插件设定
 plugins=(
   git
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
 ```
-- oh-my-zsh 主题
-```
-sudo pacman -S zsh-theme-powerlevel9k
 
-To enable Powerlevel9k theme for your user type:
-
-echo 'source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme' >> ~/.zshrc
-```
-- oh-my-zsh 字体
-```
-sudo pacman -S nerd-fonts-complete
-
-将终端字体改为nerd-fonts，否则主题特殊符号无法显示
-```
 #### 5.安装实用软件
 - 文件管理器
 ```
