@@ -9,7 +9,8 @@ export QT_IM_MOUDLE=fcitx
 export XMODIFIERS=@im=fcitx
 export VISUAL="vim"
 
-POWERLEVEL9K_MODE='awesome-fontconfig'
+#POWERLEVEL9K_MODE='awesome-fontconfig'
+POWERLEVEL9K_MODE='nerdfont-complete'
 ZSH_THEME="powerlevel9k/powerlevel9k"
 
 # Add wisely, as too many plugins slow down shell startup.
@@ -31,7 +32,8 @@ POWERLEVEL9K_STATUS_CROSS=true
 
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon dir vcs status)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(time background_jobs ram virtualenv rbenv rvm)
-POWERLEVEL9K_MODE='awesome-patched'
+#POWERLEVEL9K_MODE='awesome-patched'
+POWERLEVEL9K_MODE='nerdfont-complete'
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
 POWERLEVEL9K_TIME_FORMAT="%D{\uf073 %y.%m.%d}"
