@@ -43,6 +43,13 @@ gaps outer 2
 # 设置截图快捷键 ,先安装mate-utils, sudo pacman -S mate-utils
 bindsym $mod+p  exec  mate-screenshot -i
 
+
+# 登录时总是关掉所有的screenkey
+# exec_always killall screenkey
+# 1.5s后启动screenkey
+# exec_always sleep 1.5; screenkey
+
+
 # 登陆时启动polybar
 exec --no-startup-id  ~/.config/polybar/launch.sh
 
