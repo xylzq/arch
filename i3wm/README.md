@@ -94,8 +94,10 @@ sudo pacman -S pcmanfm
 - 主题管理器
 ```
 sudo pacman -S lxappearance
+
 所需依赖：
 sudo pacman -S gnome-themes-standard
+
 可选主题：
 yaourt -S gtk-theme-arc-git
 sudo pacman -S gtk-engine-murrine gtk-engines
