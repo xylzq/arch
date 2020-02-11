@@ -37,8 +37,8 @@ bindsym $mod+y border pixel 3
 bindsym $mod+u border none
 
 #设置窗口间距
-gaps inner 6
-gaps outer 4
+gaps inner 4
+gaps outer 2
 
 # 设置截图快捷键 ,先安装mate-utils, sudo pacman -S mate-utils
 bindsym $mod+p  exec  mate-screenshot -i
@@ -187,16 +187,16 @@ bindsym $mod+Shift+Tab workspace prev
 # We use variables to avoid repeating the names in multiple places.
 # 为下列工作区定义名称，我们使用变量避免在多个位置重复这些名称
 
-set $ws1 "1:  "
-set $ws2 "2:  "
-set $ws3 "3:  "
-set $ws4 "4:  "
-set $ws5 "5:  "
-set $ws6 "6:  "
-set $ws7 "7:  "
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
+set $ws1 "1:  "
+set $ws2 "2:  "
+set $ws3 "3:  "
+set $ws4 "4:  "
+set $ws5 "5:  "
+set $ws6 "6:  "
+set $ws7 "7:  "
+set $ws8 "8:  "
+set $ws9 "9:  "
+set $ws10 "10:  "
 
 # switch to workspace（切换到工作区）
 bindsym $mod+1 workspace $ws1
@@ -224,8 +224,9 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # Automatically putting clients on specific workspaces
 # 自动将客户端置于特定工作区
-assign [class="wechat"] $ws3
-assign [class="netease-cloud-music"] $ws4
+assign [class="wps"] $ws5
+assign [class="netease-cloud-music"] $ws7
+assign [class="vmware"] $ws10
 
 # resize window (you can also use the mouse for that)
 # 调整窗口大小（也可以使用鼠标）
