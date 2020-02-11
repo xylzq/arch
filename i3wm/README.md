@@ -76,6 +76,8 @@ echo 'source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme' >> ~/.zsh
 ```
 # nerd-fonts 含有大量字体图标，oh-my-zsh缺少则许多图标无法显示
 sudo pacman -S nerd-fonts-complete
+
+#上面的字体模式可选的有：nerdfont-complete & awesome-fontconfig & awesome-patched
 ```
 - oh-my-zsh配置
 ```
