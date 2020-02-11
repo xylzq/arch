@@ -43,13 +43,13 @@ nano /etc/lightdm/lightdm.conf
 
 关于arch配置美化的一个脚本
 
-## Download
+### Download
 ```
 sudo pacman -S wget git
 wget raw.githubusercontent.com/xylzq/arch/master/config.sh
 ```
 
-## explain
+### explain
 - 主要配置有，添加archlinuxcn等源
 - 桌面环境汉化及中文输入法
 - 一些基本主题美化，如zsh，图标主题包等
@@ -62,23 +62,23 @@ wget raw.githubusercontent.com/xylzq/arch/master/config.sh
 
 关于arch的一些实用软件
 
-## 录屏软件
+### 录屏软件
 ```
 sudo pacman -S simplescreenrecorder
 ```
-## 显示按键软件
+### 显示按键软件
 ```
 sudo pacman -S screenkey
 ```
-## 剪辑视频软件
+### 剪辑视频软件
 ```
 sudo pacman -S kdenlive
 ```
-## 修图软件
+### 修图软件
 ```
 sudo pacman -S gimp
 ```
-## vmware
+### vmware
 ```
 # 安装必要依赖
 sudo pacman -S fuse2 gtkmm linux-headers pcsclite libcanberra
@@ -101,11 +101,11 @@ sudo modprobe -a vmw_vmci vmmon
 # 启动虚拟机，填写密钥
 sudo vmware
 ```
-## 邮件
+### 邮件
 ```
 sudo pacman -S thunderbird
 ```
-## 下载器
+### 下载器
 ```
 sudo pacman -S transmission-qt 或者 transmission-gtk
 sudo pacman -S qbittorrent
