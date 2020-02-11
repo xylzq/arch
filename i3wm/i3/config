@@ -60,7 +60,6 @@ exec --no-startup-id compton -b
 # 登录时选择壁纸
 exec --no-startup-id feh --randomize --bg-center ~/Pictures/58d3341f0cfe9.jpg
 
-
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 # 窗口标签字体，也将被bar使用，除非在下面的bar{}中使用其他的字体
@@ -103,7 +102,24 @@ bindsym $mod+Ctrl+o exec mpc pause
 bindsym $mod+Ctrl+l exec mpc next
 bindsym $mod+Ctrl+k exec mpc prev
 
-# exec cmatrix
+# start the firefox
+bindsym $mod+Shift+f exec firefox
+
+# start the chrome
+bindsym $mod+Shift+g exec google-chrome-stable
+
+# start the bluetooth
+bindsym $mod+Shift+b exec blueberry
+
+# start the vmware
+bindsym $mod+Shift+v exec vmware
+
+# wps, et, wpp
+bindsym $mod+shift+w exec wps
+bindsym $mod+shift+e exec et
+bindsym $mod+shift+p exec wpp
+
+# start cmatrix
 bindsym $mod+Shift+x exec i3-sensible-terminal -e cmatrix
 
 # start a terminal
@@ -262,11 +278,11 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # reload the configuration file（重新加载配置文件）
-bindsym $mod+Shift+c reload
+bindsym $mod+ctrl+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+bindsym $mod+ctrl+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+ctrl+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 
 
