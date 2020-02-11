@@ -51,6 +51,55 @@ pacman -S cmake git wget python python2 pkg-config
 pacman -S cairo xcb-util-image xcb-util-wm xcb-util-xrm xcb-util-cursor curl
 yaourt -S alsa-lib libmpdclient wireless_tools jsoncpp i3ipc-glib-git ttf-unifont siji-git
 ```
+#### 4.安装oh-my-zsh
+- oh-my-zsh
+```
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+sudo pacman -S oh-my-zsh-git
+```
+- oh-my-zsh 插件
+```
+cd ~/.oh-my-zsh/custom/plugins
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git(高亮光标，修改插件配置时必须放最下面)
+git clone https://github.com/zsh-users/zsh-autosuggestions（命令补全插件）
+```
+```
+nano ~/.zshrc
+plugins=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
+```
+- oh-my-zsh 主题
+```
+sudo pacman -S zsh-theme-powerlevel9k
+
+To enable Powerlevel9k theme for your user type:
+
+echo 'source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme' >> ~/.zshrc
+```
+- oh-my-zsh 字体
+```
+sudo pacman -S nerd-fonts-complete
+
+将终端字体改为nerd-fonts，否则主题特殊符号无法显示
+```
+#### 5.安装实用软件
+- 文件管理器
+```
+sudo pacman -S pcmanfm
+```
+- 主题管理器
+```
+sudo pacman -S lxappearance
+所需依赖：
+sudo pacman -S gnome-themes-standard
+可选主题：
+yaourt -S gtk-theme-arc-git
+sudo pacman -S gtk-engine-murrine gtk-engines
+```
 
 ### 注意事项
 
