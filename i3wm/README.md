@@ -162,7 +162,11 @@ sudo pacman -S gtk-engine-murrine gtk-engines
 ## 注意事项
 
 ### 1.polybar配置文件
-#### - 查看自己的网卡设备，并将[module/eth] 或[module/wlan]下的interface设置为自己的网卡设备名字
+#### - 查看自己的显示器设备，并将[bar/mybar]下的monitor设置为自己显示器的名字
+```
+polybar -m
+```
+#### - 查看自己的网卡设备，并将[module/eth] 或[module/wlan]下的interface设置为自己网卡设备的名字
 ```
 ip link show
 ```
