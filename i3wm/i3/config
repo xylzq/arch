@@ -49,6 +49,8 @@ bindsym $mod+p  exec  mate-screenshot -i
 # 1.5s后启动screenkey
 # exec_always sleep 1.5; screenkey
 
+# screen timeout
+exec --no-startup-id xset dpms 600 800 900
 
 # 登陆时启动polybar
 exec --no-startup-id  ~/.config/polybar/launch.sh
