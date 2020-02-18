@@ -96,7 +96,7 @@ ps -U $home
 # 安装必要安装包
 pacman -S rsync lsof ecryptfs-utils
 modprobe ecryptfs
-ecryptfs-migrate-home -u $home
+ecryptfs-migrate-home -u $username
 exit
 ls
 cat README.txt
@@ -141,7 +141,7 @@ sudo fdisk -l
 sudo nano /etc/fstab
 ----------------------------------------------------------------------
 # /dev/sdb3
-UUID=xxxxxxxx   $home/win7  ntfs    defaults        0 0
+UUID=xxxxxxxx   /home/$username/win7  ntfs    defaults        0 0
 
 ```
 **9.备份！！！**
