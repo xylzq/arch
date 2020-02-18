@@ -119,8 +119,31 @@ sudo pacman-optimize && sync
 sudo systemctl --failed
 sudo journalctl -p 3 -xb
 ```
+8.多系统管理
+生成多系统引导程序
+```
+# 探寻其他系统
+sudo pacman -S os-prober
+# 生成配置文件
+sudo grub-mkconfig -o /boot/grub/grub.cf
+```
+将其他系统(分区)自动挂载到家目录
+```
+# 在家目录创建挂载点（挂载点最好为空文件夹，非空文件夹文件在挂载后将不会显示，除非卸载此挂载点）
+mkdir win7
+# 查看挂载分区uuid
+sudo blkid
+# 查看挂载分区类型
+sudo fdisk -l
+# 将挂载信息填入fstab文件（除了结尾的00之间使用空格，其他全部用跳格tab分割）
 
-**8.备份！！！**
+sudo nano /etc/fstab
+----------------------------------------------------------------------
+# /dev/sdb3
+UUID=xxxxxxxx   $home/win7  ntfs    defaults        0 0
+
+```
+**9.备份！！！**
 
 # archlinux application
 
