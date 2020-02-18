@@ -2,36 +2,36 @@
 
 关于arch安装的一个脚本
 
-## Download
+### Download
 ```
 dhcpcd
 wget raw.githubusercontent.com/xylzq/arch/master/setup.sh
 ```
 
-## Usage
+### Usage
 - 执行 bash setup.sh
 - 脚本运行前可根据需要更改分区位置大小格式及启动项等.
 - 脚本运行中需要确定是否更新，填写域名，用户名及密码等.
 - 脚本运行结束后重启即可基本使用.
 - 桌面环境可重启后根据需要自行安装
 
-## 几个桌面环境安装方法
-### - KDE：
+### 几个桌面环境安装方法
+#### - KDE：
 ```
 pacman -S kf5 kf5-aids plasma kdebase kdegraphics kde-l10n-zh_cn sddm
 systemctl enable sddm
 ```
-### - Gnome：
+#### - Gnome：
 ```
 pacman -S gnome gnome-terminal gnome-tweak-tool chrome-gnome-shell gdm
 systemctl enable gdm
 ```
-### - Xfce：
+#### - Xfce：
 ```
 pacman -S xfce4 xfce4-goodies sddm
 systemctl enable sddm 
 ```
-### - Deepin：
+#### - Deepin：
 ```
 pacman -S deepin deepin-extra deepin-terminal lightdm lightdm-gtk-greeter
 systemctl enable lightdm
@@ -57,6 +57,7 @@ wget raw.githubusercontent.com/xylzq/arch/master/config.sh
 - 一些实用软件如文档管理器，播放器，网易云音乐，wps,火狐浏览器等
 - 大家可根据需要自由增减
 - 安装完zsh后脚本会自动退出，所以zsh的配置脚本无法运行，大家可以手动操作脚本的内容
+
 
 # 安装完archlinux后要做的几件事
 
