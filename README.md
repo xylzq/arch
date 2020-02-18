@@ -58,6 +58,70 @@ wget raw.githubusercontent.com/xylzq/arch/master/config.sh
 - 大家可根据需要自由增减
 - 安装完zsh后脚本会自动退出，所以zsh的配置脚本无法运行，大家可以手动操作脚本的内容
 
+# 安装完archlinux后要做的几件事
+
+### 更换内核(linux比较激进，不够稳定)
+```
+sudo pacman -S linux-lts
+sudo grub-mkconfig -o /boot/grub/grub.cfg 
+# 安装内核头文件（某些软件如要，如virtualbox）
+# sudo pacman -S linux-lts-headers 
+sudo pacman -Rs linux
+```
+
+### 安装微代码microcode（可修正cpu硬件错误）
+```
+# intel
+sudo pacman -S intel-ucode
+# amd
+sudo pacman -S amd-ucode
+sudo grub-mkconfig -o /boot/grub/grub.cfg 
+```
+
+### 安装防火墙
+```
+sudo pacman -S ufw
+sudo ufw enable
+sudo ufw status verbose
+sudo systemctl enable ufw.service
+```
+
+### 加密家目录
+```
+# 使用eCryptFS
+# 重启进入tty2
+# root进入查看$home进程（如果有程序为活跃状态，则杀死它）
+ps -U $home
+# 安装必要安装包
+pacman -S rsync lsof ecryptfs-utils
+modprobe ecryptfs
+ecryptfs-migrate-home -u $home
+exit
+ls
+cat README.txt
+ecryptfs-mount-private
+ecryptfs-unwrap-passphrase
+# 然后配置
+```
+
+### 删除孤立的包
+```
+sudo pacman -Rns $(pacman -Qtdq)
+```
+
+### 提高数据库访问速度(固态硬盘不可使用)
+```
+sudo pacman-optimize && sync
+```
+
+### 检查系统文件错误
+```
+sudo systemctl --failed
+sudo journalctl -p 3 -xb
+```
+
+### 备份！！！
+
 # archlinux application
 
 关于arch的一些实用软件
@@ -110,3 +174,4 @@ sudo pacman -S thunderbird
 sudo pacman -S transmission-qt 或者 transmission-gtk
 sudo pacman -S qbittorrent
 ```
+
