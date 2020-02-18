@@ -23,6 +23,8 @@ pacman -S nvidia bbswitch optimus-manager-qt
 pacman -S nvidia-dkms bbswitch-dkms optimus-manager-qt
 # KDE桌面
 pacman -S nvidia-dkms bbswitch-dkms optimus-manager-qt-kde
+
+# 重启后，托盘出现显卡logo图标，右键设置，第二项optimus的switching method选择bbswitch，确定即可，使用时可在托盘手动选择显卡
 ```
 
 
