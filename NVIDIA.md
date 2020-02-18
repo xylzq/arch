@@ -9,16 +9,22 @@
 pacman -S xorg-xinit xorg-server
 ```
 
-#### 2.安装大黄蜂显卡管理（用于多显卡切换）
+#### 2.安装多显卡显卡管理程序
+- 大黄蜂方案（不支持DXVK）
 ```
+pacman -S nvidia
 pacman -S bumblebee
 systemctl enable bumblebeed
 ```
+- bbswitch方案
+```
+pacman -S nvidia bbswitch optimus-manager-qt
+# 自定义内核则：
+pacman -S nvidia-dkms bbswitch-dkms optimus-manager-qt
+# KDE桌面
+pacman -S nvidia-dkms bbswitch-dkms optimus-manager-qt-kde
+```
 
-#### 3.安装闭源显卡驱动
-```
-pacman -S nvidia
-```
 
 
 
