@@ -16,22 +16,22 @@ wget raw.githubusercontent.com/xylzq/arch/master/setup.sh
 - 桌面环境可重启后根据需要自行安装
 
 ### 几个桌面环境安装方法
-#### - KDE：
+- KDE：
 ```
 pacman -S kf5 kf5-aids plasma kdebase kdegraphics kde-l10n-zh_cn sddm
 systemctl enable sddm
 ```
-#### - Gnome：
+- Gnome：
 ```
 pacman -S gnome gnome-terminal gnome-tweak-tool chrome-gnome-shell gdm
 systemctl enable gdm
 ```
-#### - Xfce：
+- Xfce：
 ```
 pacman -S xfce4 xfce4-goodies sddm
 systemctl enable sddm 
 ```
-#### - Deepin：
+- Deepin：
 ```
 pacman -S deepin deepin-extra deepin-terminal lightdm lightdm-gtk-greeter
 systemctl enable lightdm
