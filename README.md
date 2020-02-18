@@ -120,6 +120,7 @@ sudo systemctl --failed
 sudo journalctl -p 3 -xb
 ```
 8.多系统管理
+
 生成多系统引导程序
 ```
 # 探寻其他系统
