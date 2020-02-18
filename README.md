@@ -36,7 +36,7 @@ systemctl enable sddm
 pacman -S deepin deepin-extra deepin-terminal lightdm lightdm-gtk-greeter
 systemctl enable lightdm
 nano /etc/lightdm/lightdm.conf
-#将greeter-session=example-gtk-gnome改为greeter-session=lightdm-deepin-greeter
+# 将greeter-session=example-gtk-gnome改为greeter-session=lightdm-deepin-greeter
 ```
 
 # archlinux config script
@@ -61,7 +61,7 @@ wget raw.githubusercontent.com/xylzq/arch/master/config.sh
 
 # 安装完archlinux后要做的几件事
 
-- 更换内核(linux比较激进，不够稳定)
+### 更换内核(linux比较激进，不够稳定)
 ```
 sudo pacman -S linux-lts
 sudo grub-mkconfig -o /boot/grub/grub.cfg 
@@ -70,7 +70,7 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 sudo pacman -Rs linux
 ```
 
-- 安装微代码microcode（可修正cpu硬件错误）
+### 安装微代码microcode（可修正cpu硬件错误）
 ```
 # intel
 sudo pacman -S intel-ucode
@@ -79,7 +79,7 @@ sudo pacman -S amd-ucode
 sudo grub-mkconfig -o /boot/grub/grub.cfg 
 ```
 
-- 安装防火墙
+### 安装防火墙
 ```
 sudo pacman -S ufw
 sudo ufw enable
@@ -87,7 +87,7 @@ sudo ufw status verbose
 sudo systemctl enable ufw.service
 ```
 
-- 加密家目录
+### 加密家目录
 ```
 # 使用eCryptFS
 # 重启进入tty2
@@ -105,25 +105,26 @@ ecryptfs-unwrap-passphrase
 # 然后配置
 ```
 
-- 删除孤立的包
+### 删除孤立的包
 ```
 sudo pacman -Rns $(pacman -Qtdq)
 ```
 
-- 提高数据库访问速度(固态硬盘不可使用)
+### 提高数据库访问速度(固态硬盘不可使用)
 ```
 sudo pacman-optimize && sync
 ```
 
-- 检查系统文件错误
+### 检查系统文件错误
 ```
 sudo systemctl --failed
 sudo journalctl -p 3 -xb
 ```
 
-- 备份！！！
+### `备份！！！`
 
 # archlinux application
+===
 
 关于arch的一些实用软件
 
