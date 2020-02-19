@@ -54,7 +54,7 @@ mount_partitions(){
 #最小安装
 install_baseSystem(){
 	print_title "install_baseSystem"
-        pacstrap /mnt base base-devel linux linux-firmware wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
+        pacstrap /mnt base base-devel linux-lts linux-lts-headers linux-firmware wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
 }
 
 #生成标卷文件表
@@ -81,8 +81,9 @@ configrue_drive(){
         arch_chroot "pacman -S --noconfirm xorg-server xorg-twm xorg-xclock xorg-server -y"
 	arch_chroot "pacman -S --noconfirm bumblebee -y"
         arch_chroot "systemctl enable bumblebeed"
-        arch_chroot "pacman -S --noconfirm nvidia nvidia-utils nvidia-settings xf86-input-synaptics -y"        
-        #arch_chroot "pacman -S --noconfirm linux-lts intel-ucode linux-headers -y"
+        arch_chroot "pacman -S --noconfirm nvidia-dkms nvidia-utils nvidia-settings xf86-input-synaptics -y"        
+        arch_chroot "intel-ucode -y"
+        # arch_chroot "amd-ucode -y"
 }
 
 #安装网络管理程序
