@@ -131,6 +131,7 @@ sudo grub-mkconfig -o /boot/grub/grub.cf
 - 多系统时间同步
 ```
 # 安装 Windows 和 Linux 系统后 Windows 的时间会比慢8个小时
+————————————————
 # 原因：
 # 电脑系统中有两个时间：
 # 硬件时间：保存在主板中，信息比较少没时区、夏令时的概念
@@ -140,8 +141,9 @@ sudo grub-mkconfig -o /boot/grub/grub.cf
 # UTC：是一种世界标准时间，Linux 这类类 UNIX 多数会使用，UTC 加减时区之后才是本地时间。
 # Windows 认为硬件时间就是本地时间，所以会直接把主板中的时间拿来当做当前的时间。设置或同步时间后也会把“正确”的时间写入主板
 # Linux 认为硬件时间是 UTC 标准时间，Linux 时间同步后会把“正确”的时间 -8 之后作为标准 UTC 标准时间写入主板
-# 解决办法：
 ————————————————
+# 解决办法：
+
 # windows:
 # 以管理员身份使用运行
 reg add "HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\TimeZoneInformation" /v RealTimeIsUniversal /d 1 /t REG_DWORD /f
