@@ -14,6 +14,7 @@ wget raw.githubusercontent.com/xylzq/arch/master/setup.sh
 - 脚本运行中需要确定是否更新，填写域名，用户名及密码等.
 - 脚本运行结束后重启即可基本使用.
 - 桌面环境可重启后根据需要自行安装
+- 内核安装的是linux-lts，可根据需求自行更改，在安装基本系统处
 
 ### 几个桌面环境安装方法
 - KDE：
