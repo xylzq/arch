@@ -65,7 +65,7 @@ wget raw.githubusercontent.com/xylzq/arch/master/config.sh
 ```
 sudo pacman -S linux-lts
 sudo grub-mkconfig -o /boot/grub/grub.cfg 
-# 安装内核头文件（某些软件如要，如virtualbox）
+# 安装内核头文件（某些软件需要，如virtualbox）
 # sudo pacman -S linux-lts-headers 
 sudo pacman -Rs linux
 ```
