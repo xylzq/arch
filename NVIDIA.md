@@ -42,6 +42,10 @@ pacman -S xorg-xinit xorg-server
 ```
 pacman -S nvidia nvidia-utils nvidia-settings
 ```
+* 如果内核安装为 linux-lts，则驱动安装编译驱动，安装完驱动后结束，后面的不用看了！
+```
+pacman -S nvidia-dkms nvidia-utils nvidia-settings
+```
 
 #### 3.查看n卡的BusID
 ```
