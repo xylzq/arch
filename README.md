@@ -80,7 +80,17 @@ sudo pacman -S amd-ucode
 sudo grub-mkconfig -o /boot/grub/grub.cfg 
 ```
 
-3.安装防火墙
+3.提升显卡性能
+```
+一、CUDA
+sudo pacman -S cuda
+二、opencl
+# intel和amd
+sudo pacman -S opencl-headers opencl-mesa lib32-opencl-mesa
+# nvidia
+opencl-nvidia lib32-opencl-nvidia
+
+4.安装防火墙
 ```
 sudo pacman -S ufw
 sudo ufw enable
@@ -88,7 +98,7 @@ sudo ufw status verbose
 sudo systemctl enable ufw.service
 ```
 
-4.加密家目录
+5.加密家目录
 ```
 # 使用eCryptFS
 # 重启进入tty2
@@ -106,21 +116,21 @@ ecryptfs-unwrap-passphrase
 # 然后配置
 ```
 
-5.删除孤立的包
+6.删除孤立的包
 ```
 sudo pacman -Rns $(pacman -Qtdq)
 ```
 
-6.提高数据库访问速度(固态硬盘不可使用)
+7.提高数据库访问速度(固态硬盘不可使用)
 ```
 sudo pacman-optimize && sync
 ```
-7.检查系统文件错误
+8.检查系统文件错误
 ```
 sudo systemctl --failed
 sudo journalctl -p 3 -xb
 ```
-8.多系统管理
+9.多系统管理
 
 - 生成多系统引导程序
 ```
@@ -171,7 +181,7 @@ sudo nano /etc/fstab
 UUID=xxxxxxxx   /home/$username/win7  ntfs    defaults        0 0
 
 ```
-**9.备份！！！**
+**10.备份！！！**
 
 # archlinux application
 
