@@ -89,6 +89,14 @@ sudo pacman -S cuda
 sudo pacman -S opencl-headers opencl-mesa lib32-opencl-mesa
 # nvidia
 opencl-nvidia lib32-opencl-nvidia
+```
+4.添加window字体
+```
+sudo mkdir /usr/share/fonts/WindowsFonts
+将windows字体全部复制到这个文件夹，一般在C：/windows/Fonts 里面
+cd /usr/share/fonts/WindowsFonts
+sudo fc-cache -fv
+```
 
 4.安装防火墙
 ```
