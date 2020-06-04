@@ -96,6 +96,8 @@ sudo mkdir /usr/share/fonts/WindowsFonts
 将windows字体全部复制到这个文件夹，一般在C：/windows/Fonts 里面
 cd /usr/share/fonts/WindowsFonts
 sudo fc-cache -fv
+# archlinux则直接：
+yaourt -S ttf-ms-fonts
 ```
 
 5.安装防火墙
