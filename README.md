@@ -225,4 +225,46 @@ sudo pacman -S thunderbird
 sudo pacman -S transmission-qt 或者 transmission-gtk
 sudo pacman -S qbittorrent
 ```
+8.游戏管理器lutris
+```
+# 安装必备驱动：
+# 进入官网https://github.com/lutris/docs/blob/master/InstallingDrivers.md按照提示根据系统下载相应驱动：
+sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
+（lts内核再安装 pacman -S nvidia-lts ）
 
+# 安装安装litris和它相关的包：
+sudo pacman -S dxvk wine-staging lutris
+
+# 安装wine-staging的可选依赖（为了完整运行window程序，最好都安装好）：
+# 进入官网https://github.com/lutris/docs/blob/master/WineDependencies.md按照提示根据系统下载相应依赖：
+sudo pacman -S wine-staging giflib lib32-giflib libpng lib32-libpng libldap lib32-libldap gnutls lib32-gnutls mpg123 lib32-mpg123 openal lib32-openal v4l-utils lib32-v4l-utils libpulse lib32-libpulse libgpg-error lib32-libgpg-error alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib libjpeg-turbo lib32-libjpeg-turbo sqlite lib32-sqlite libxcomposite lib32-libxcomposite libxinerama lib32-libgcrypt libgcrypt lib32-libxinerama ncurses lib32-ncurses opencl-icd-loader lib32-opencl-icd-loader libxslt lib32-libxslt libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader
+
+# 提升游戏性能的程序：
+yaourt -S gamemod lib32-gamemode
+# 配置gamemode：
+一、查找gamemode路径
+find /usr -iname 'libgamemodeauto*' 
+二、复制路径 
+/usr/lib/libgamemodeauto.so.0
+三、添加路径
+运行lutris，点击preferences中的system options里面的add，
+key输入LD_PRELOAD，Value输入上述路径/usr/lib/libgamemodeauto.so.0，save。
+# 继续提升性能：
+参照 https://github.com/lutris/https://github.com/lutris/docs/blob/master/Performance-Tweaks.md 最下面
+其中，NIVDIA可按照上述添加路径的方法，
+key输入__GL_THREADED_OPTIMIZATION，Value输入1;
+AMD可可按照上述添加路径的方法，
+key输入mesa_glthread，Value输入true，save。
+
+# 继续提升性能：
+使用带tkg的wine版本，manager version，因为带tkg的wine都启用了ESyns,对性能的提升极大;
+但是要发挥ESyns的效果，需要优化内核：
+sudo pacman -S ulimit
+ulimit -Hn
+若出现的数字比524288大（不小于就行），就不用配置了，若没有，则继续：
+sudo nano /etc/systemd/system.conf
+将 DefaultLimitNOFILE 前面的#去掉，= 后面的数字改为524288；
+sudo nano /etc/systemd/user.conf
+将 DefaultLimitNOFILE 前面的#去掉，= 后面的数字改为524288.
+
+# 其他配置可参照https://github.com/lutris/lutris/wiki/ 修改。
