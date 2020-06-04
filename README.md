@@ -98,7 +98,7 @@ cd /usr/share/fonts/WindowsFonts
 sudo fc-cache -fv
 ```
 
-4.安装防火墙
+5.安装防火墙
 ```
 sudo pacman -S ufw
 sudo ufw enable
@@ -106,7 +106,7 @@ sudo ufw status verbose
 sudo systemctl enable ufw.service
 ```
 
-5.加密家目录
+6.加密家目录
 ```
 # 使用eCryptFS
 # 重启进入tty2
@@ -124,21 +124,21 @@ ecryptfs-unwrap-passphrase
 # 然后配置
 ```
 
-6.删除孤立的包
+7.删除孤立的包
 ```
 sudo pacman -Rns $(pacman -Qtdq)
 ```
 
-7.提高数据库访问速度(固态硬盘不可使用)
+8.提高数据库访问速度(固态硬盘不可使用)
 ```
 sudo pacman-optimize && sync
 ```
-8.检查系统文件错误
+9.检查系统文件错误
 ```
 sudo systemctl --failed
 sudo journalctl -p 3 -xb
 ```
-9.多系统管理
+10.多系统管理
 
 - 生成多系统引导程序
 ```
@@ -189,7 +189,7 @@ sudo nano /etc/fstab
 UUID=xxxxxxxx   /home/$username/win7  ntfs    defaults        0 0
 
 ```
-**10.备份！！！**
+**11.备份！！！**
 
 # archlinux application
 
