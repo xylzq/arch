@@ -68,7 +68,7 @@ configure_system(){
 	print_title "configure_system"
 	arch_chroot "ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime"
 	arch_chroot "hwclock --systohc --utc"
-	arch_chroot "mkinitcpio -p linux"
+	arch_chroot "mkinitcpio -p linux-lts"
 	echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 	echo "zh_CN.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 	arch_chroot "locale-gen"
