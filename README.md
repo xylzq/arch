@@ -7,7 +7,10 @@
 dhcpcd
 wget raw.githubusercontent.com/xylzq/arch/master/setup.sh
 ```
-
+无法链接github的朋友可以使用下面的链接
+```
+wget gitee.com/xylzq/arch/raw/master/setup.sh
+```
 ### Usage
 - 执行 bash setup.sh
 - 脚本运行前可根据需要更改分区位置大小格式及启动项等.
