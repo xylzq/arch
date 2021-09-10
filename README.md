@@ -248,7 +248,23 @@ sudo pacman -S thunderbird
 sudo pacman -S transmission-qt 或者 transmission-gtk
 sudo pacman -S qbittorrent
 ```
-8.游戏管理器lutris
+8.打印机
+```
+# 安装通用打印驱动系统cups
+sudo pacman -S cups
+# 启动cups并加入自启动
+sudo systemctl start cups
+sudo systemctl enable cups
+# 下载开源驱动程序包（库）
+sudo pacman gutenprint
+
+# 其他驱动程序包
+- 佳能
+sudo pacman -S cndrvcups-lb
+- 惠普
+sudo pacman -S hplip
+```
+9.游戏管理器lutris
 ```
 # 安装必备驱动：
 # 进入官网https://github.com/lutris/docs/blob/master/InstallingDrivers.md按照提示根据系统下载相应驱动：
