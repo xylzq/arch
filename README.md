@@ -239,6 +239,48 @@ sudo modprobe -a vmw_vmci vmmon
 # 启动虚拟机，填写密钥
 sudo vmware
 ```
+
+6.virtualbox
+```
+# 安装virtualbox虚拟机
+1]、安装软件包
+sudo pacman -S virtualbox
+2]、安装内核模块
+sudo pacman -S virtualbox-host-dkms
+3]、加载模块
+modprobe vboxdrv (vboxnetadp vboxnetflt vboxpci)
+4]、从客体系统访问主机 USB 设备
+    - 将需要运行 VirtualBox 的用户名添加到 vboxusers 用户组
+sudo usermod -G vboxusers -a $USERS(如primary)
+
+# 开启VT-x/AMD-V功能
+1]、查看系统列表
+VBoxManage list vms
+2]、开启指定系统次功能
+VBoxManage modifyvm "$SYSTEMS(如：win7)" --nested-hw-virt on
+
+# virtualbox内的linux系统无法打开共享文件夹解决办法
+1]、方法一：将虚拟机中，使用者加入虚拟用户组，重启
+sudo usermod -a -G vboxsf $USERS(如primary)
+2]、方法二：修改虚拟机中，共享文件夹权限
+sudo chmod -R 777 /media
+
+# 安装MacOS系统
+1]、查看硬件信息
+xrandr & sysinfo
+2]、创建虚拟机 MacOSx
+ # 寻找网上资源（.vmdk文件）并按文件配置创建该系统
+ - 主机命令行调整该系统参数
+ # VBoxManage modifyvm MacOSx  --cpuidset 00000001 000306a9 00020800 80000201 178bfbff
+   VBoxManage setextradata "MacOSx" "VBoxInternal/Devices/efi/0/Config/DmiSystemProduct" "iMac11,3"
+   VBoxManage setextradata "MacOSx" "VBoxInternal/Devices/efi/0/Config/DmiSystemVersion" "1.0"
+   VBoxManage setextradata "MacOSx" "VBoxInternal/Devices/efi/0/Config/DmiBoardProduct" "Iloveapple"
+   VBoxManage setextradata "MacOSx" "VBoxInternal/Devices/smc/0/Config/DeviceKey" "ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc"
+   VBoxManage setextradata "MacOSx" "VBoxInternal/Devices/smc/0/Config/GetKeyFromRealSMC" 1
+3]、安装系统
+
+```
+
 6.邮件
 ```
 sudo pacman -S thunderbird
