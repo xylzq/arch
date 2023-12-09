@@ -24,7 +24,7 @@ sudo mount /dev/mapper/Backup /mnt
 
 * 备份策略：备份数据放到 backup 目录下，/ 和主目录 /home/primary 分开备份。每个备份是使用日期和时间命名的快照子卷。除了用于每次同步的 current 目录外其它的子卷都是只读的，以免被意外修改。（在 run 目录下是用于直接运行的，可写。这些可以按需建立。）
 
-  ```
+```
   /mnt
   |-- backup(dir)
   |   |-- home(dir)
@@ -49,7 +49,7 @@ sudo mount /dev/mapper/Backup /mnt
 
 * 操作步骤
 
-  ```
+```
   sudo mkdir -p /mnt/backup/home
   sudo mkdir -p /mnt/backup/root
   sudo btrfs subvolume create /mnt/backup/home/current
