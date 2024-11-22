@@ -72,6 +72,8 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 # 安装内核头文件（某些软件需要，如virtualbox）
 # sudo pacman -S linux-lts-headers 
 sudo pacman -Rs linux
+# 启用清理服务
+systemctl enable linux-modules-cleanup.service
 ```
 
 2.安装微代码microcode（可修正cpu硬件错误）
