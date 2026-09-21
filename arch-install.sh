@@ -14,6 +14,9 @@
 #      4) VMware 固件类型与 ISO 启动模式一致,Secure Boot 已关闭。
 #
 #  脚本会自行判断 live 环境是 UEFI 还是 BIOS 启动,并据此选择分区表与引导方式。
+#
+#  注意:运行期输出全部使用 ASCII。Linux 虚拟终端的内核点阵字体没有汉字字形,
+#  在 archiso 控制台里输出中文只会显示成方块,所以脚本自身不打印任何非 ASCII 字符。
 # =============================================================================
 
 set -euo pipefail
@@ -62,11 +65,11 @@ print_title() {
 }
 
 warn() {
-    echo "${BOLD}警告:${RESET} $*" >&2
+    echo "${BOLD}WARNING:${RESET} $*" >&2
 }
 
 die() {
-    echo "${BOLD}错误:${RESET} $*" >&2
+    echo "${BOLD}ERROR:${RESET} $*" >&2
     exit 1
 }
 
@@ -74,9 +77,10 @@ on_error() {
     local code=$1
     echo >&2
     print_line >&2
-    echo "安装中断(退出码 ${code})" >&2
-    echo "失败命令: ${BASH_COMMAND}" >&2
-    echo "目标系统仍挂载在 ${MNT},可手动排查后重新运行;日志: ${LOG_FILE}" >&2
+    echo "INSTALL FAILED (exit code ${code})" >&2
+    echo "Failed command: ${BASH_COMMAND}" >&2
+    echo "The target is still mounted at ${MNT}; fix the problem and re-run." >&2
+    echo "Log file: ${LOG_FILE}" >&2
     print_line >&2
     exit "$code"
 }
@@ -98,13 +102,13 @@ part_path() {
 
 # ----------------------------- 各阶段 ----------------------------------------
 preflight() {
-    print_title "环境检查"
+    print_title "Preflight checks"
 
-    [[ $EUID -eq 0 ]] || die "请以 root 身份运行(archiso 里默认就是 root)"
-    [[ -d /run/archiso ]] || warn "看起来不是 archiso live 环境,继续前请自行确认"
+    [[ $EUID -eq 0 ]] || die "Run this script as root (the archiso live environment is root by default)."
+    [[ -d /run/archiso ]] || warn "This does not look like an archiso live environment; continue only if you know what you are doing."
 
     if mountpoint -q "$MNT"; then
-        die "${MNT} 已被挂载,请先执行 umount -R ${MNT} 再运行本脚本"
+        die "${MNT} is already mounted; run 'umount -R ${MNT}' first."
     fi
 
     if [[ -z $DISK ]]; then
@@ -116,7 +120,7 @@ preflight() {
             fi
         done
     fi
-    [[ -n $DISK && -b $DISK ]] || die "找不到目标磁盘,可用 DISK=/dev/sdX 指定"
+    [[ -n $DISK && -b $DISK ]] || die "No target disk found; specify one with DISK=/dev/sdX."
 
     if [[ -d /sys/firmware/efi ]]; then
         BOOT_MODE=uefi
@@ -129,45 +133,57 @@ preflight() {
     PART_ROOT="$(part_path "$DISK" 3)"
 
     if lsblk -no MOUNTPOINT "$DISK" 2>/dev/null | grep -q '[^[:space:]]'; then
-        die "${DISK} 上还有分区处于挂载状态,请先全部卸载再运行"
+        die "${DISK} still has mounted partitions; unmount them first."
     fi
     if grep -q "^${DISK}" /proc/swaps 2>/dev/null; then
-        die "${DISK} 上还有激活的 swap,请先 swapoff 再运行"
+        die "${DISK} still has active swap; run swapoff first."
     fi
 
     [[ $TARGET_HOSTNAME =~ ^[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?$ ]] \
-        || die "主机名不合法: ${TARGET_HOSTNAME}"
+        || die "Invalid hostname: ${TARGET_HOSTNAME}"
     [[ $TARGET_USER =~ ^[a-z_][a-z0-9_-]*$ ]] \
-        || die "用户名不合法(须小写字母或下划线开头): ${TARGET_USER}"
+        || die "Invalid username (must start with a lowercase letter or underscore): ${TARGET_USER}"
 
-    echo "live 启动模式 : ${BOOT_MODE}"
-    echo "目标磁盘      : ${DISK}"
-    echo "内核          : ${KERNEL_PKG}"
-    echo "主机名 / 用户 : ${TARGET_HOSTNAME} / ${TARGET_USER}"
-    echo "时区 / 语言   : ${TIMEZONE} / ${SYS_LANG}"
-    echo "日志文件      : ${LOG_FILE}"
+    echo "Live boot mode   : ${BOOT_MODE}"
+    echo "Target disk      : ${DISK}"
+    echo "Kernel package   : ${KERNEL_PKG}"
+    echo "Hostname / user  : ${TARGET_HOSTNAME} / ${TARGET_USER}"
+    echo "Timezone / locale: ${TIMEZONE} / ${SYS_LANG}"
+    echo "Log file         : ${LOG_FILE}"
     echo
     lsblk "$DISK" || true
     echo
 
     if [[ $BOOT_MODE == uefi ]]; then
-        echo "将以 UEFI 方式安装:GPT + ESP(fat32) + GRUB(x86_64-efi)"
+        echo "Install mode: UEFI  -> GPT + ESP(fat32) + GRUB(x86_64-efi)"
     else
-        echo "将以 BIOS 方式安装:MBR + GRUB(i386-pc)"
-        warn "请确认 VMware 的固件类型就是 BIOS。若虚拟机是 UEFI 固件,重启后将无法引导,"
-        warn "此时应在 Boot Manager 里用「EFI ... CDROM」重新启动 live 环境再运行本脚本。"
+        echo "Install mode: BIOS  -> MBR + GRUB(i386-pc)"
+        warn "Make sure the VM firmware really is BIOS. If the VM uses UEFI firmware, the installed system will not boot."
+        warn "In that case, restart the live environment via 'EFI ... CDROM' in the Boot Manager and run this script again."
     fi
     echo
 
     if [[ $AUTO_CONFIRM != 1 ]]; then
         local ans
-        read -r -p "确认清空 ${DISK} 上的全部数据?输入 YES 继续: " ans
-        [[ $ans == YES ]] || die "用户取消操作"
+        while true; do
+            read -r -p "Wipe ALL data on ${DISK}? Type YES to continue: " ans || die "Aborted."
+            case "${ans^^}" in
+            YES)
+                break
+                ;;
+            '')
+                echo "  -> type YES (letters only) and press Enter, or press Ctrl-C to abort."
+                ;;
+            *)
+                die "Aborted by user."
+                ;;
+            esac
+        done
     fi
 }
 
 update_mirrorlist() {
-    print_title "配置 pacman 镜像源"
+    print_title "Configuring pacman mirrors"
 
     local tmpfile url
     tmpfile="$(mktemp --suffix=-mirrorlist)"
@@ -177,16 +193,16 @@ update_mirrorlist() {
         && grep -q '^#Server' "$tmpfile"; then
         sed -i 's/^#Server/Server/' "$tmpfile"
         cp -f "$tmpfile" /etc/pacman.d/mirrorlist
-        echo "已启用 $(grep -c '^Server' /etc/pacman.d/mirrorlist) 个国内镜像源"
+        echo "Enabled $(grep -c '^Server' /etc/pacman.d/mirrorlist) mirror(s) from the CN list"
     else
-        warn "镜像列表获取失败,沿用 live 环境自带的 mirrorlist"
+        warn "Could not fetch the mirror list; keeping the mirrorlist shipped with the live ISO."
     fi
 
     rm -f "$tmpfile"
 }
 
 create_partitions() {
-    print_title "创建分区表(${BOOT_MODE})"
+    print_title "Creating partition table (${BOOT_MODE})"
 
     local boot_end swap_end
     boot_end=$((1 + BOOT_SIZE_MIB))
@@ -223,7 +239,7 @@ create_partitions() {
 }
 
 format_partitions() {
-    print_title "格式化分区"
+    print_title "Formatting partitions"
 
     local parts=("$PART_BOOT" "$PART_ROOT")
     if [[ $SWAP_SIZE_MIB -gt 0 ]]; then
@@ -232,7 +248,7 @@ format_partitions() {
 
     local p
     for p in "${parts[@]}"; do
-        [[ -b $p ]] || die "分区 ${p} 不存在,分区表可能未生效"
+        [[ -b $p ]] || die "Partition ${p} does not exist; the partition table was probably not reloaded."
         wipefs -a "$p" >/dev/null 2>&1 || true
     done
 
@@ -249,7 +265,7 @@ format_partitions() {
 }
 
 mount_partitions() {
-    print_title "挂载分区"
+    print_title "Mounting partitions"
 
     mount "$PART_ROOT" "$MNT"
     mkdir -p "$MNT/boot"
@@ -261,10 +277,10 @@ mount_partitions() {
 }
 
 install_base() {
-    print_title "安装基础系统(pacstrap)"
+    print_title "Installing base system (pacstrap)"
 
     # 刷新同步数据库,避免 ISO 自带的 DB 过期导致下载 404
-    pacman -Syy --noconfirm || warn "刷新软件包数据库失败,继续尝试安装"
+    pacman -Syy --noconfirm || warn "Could not refresh the package databases; continuing anyway."
 
     local ucode=''
     if grep -qm1 'GenuineIntel' /proc/cpuinfo; then
@@ -289,14 +305,14 @@ install_base() {
 }
 
 generate_fstab() {
-    print_title "生成 fstab"
+    print_title "Generating fstab"
 
     genfstab -U "$MNT" > "$MNT/etc/fstab"
     cat "$MNT/etc/fstab"
 }
 
 configure_system() {
-    print_title "配置时区 / 语言 / initramfs"
+    print_title "Configuring timezone / locale / initramfs"
 
     in_chroot "ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime"
     in_chroot "hwclock --systohc --utc"
@@ -315,7 +331,7 @@ configure_system() {
 }
 
 install_extra_packages() {
-    print_title "安装网络与图形基础组件"
+    print_title "Installing network and graphics packages"
 
     local pkgs=(
         networkmanager network-manager-applet
@@ -326,7 +342,7 @@ install_extra_packages() {
 
     # 个别可选包可能已从仓库移除,失败时降级为只装核心组件,避免整体中断
     if ! in_chroot "pacman -S --noconfirm --needed ${pkgs[*]}"; then
-        warn "部分可选包安装失败,改为只安装核心组件重试"
+        warn "Some optional packages failed to install; retrying with the core set only."
         in_chroot "pacman -S --noconfirm --needed networkmanager network-manager-applet net-tools iw wireless_tools wpa_supplicant xorg-server xorg-xinit"
     fi
 
@@ -335,12 +351,12 @@ install_extra_packages() {
 }
 
 configure_bootloader() {
-    print_title "安装并配置引导程序(${BOOT_MODE})"
+    print_title "Installing and configuring the bootloader (${BOOT_MODE})"
 
     if [[ $BOOT_MODE == uefi ]]; then
         if ! mountpoint -q /sys/firmware/efi/efivars; then
             mount -t efivarfs efivarfs /sys/firmware/efi/efivars \
-                || warn "efivars 挂载失败,efibootmgr 可能无法写入启动项(兜底路径仍会生成)"
+                || warn "Could not mount efivars; efibootmgr may fail to register a boot entry (the fallback path is created anyway)."
         fi
 
         # efibootmgr 是给固件 NVRAM 写启动项所必需的,原脚本漏装
@@ -353,7 +369,7 @@ configure_bootloader() {
         in_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
         if ! in_chroot "efibootmgr -v | grep -qi grub"; then
-            warn "efibootmgr 未能写入启动项,已用 EFI/BOOT/BOOTX64.EFI 兜底,通常仍可引导"
+            warn "efibootmgr did not register a boot entry; the EFI/BOOT/BOOTX64.EFI fallback was installed and should still boot."
         fi
     else
         in_chroot "pacman -S --noconfirm --needed grub"
@@ -363,26 +379,26 @@ configure_bootloader() {
 }
 
 configure_identity() {
-    print_title "设置主机名与 root 密码"
+    print_title "Setting hostname and root password"
 
     echo "$TARGET_HOSTNAME" > "$MNT/etc/hostname"
     printf '127.0.0.1\tlocalhost\n::1\t\tlocalhost\n127.0.1.1\t%s.localdomain\t%s\n' \
         "$TARGET_HOSTNAME" "$TARGET_HOSTNAME" > "$MNT/etc/hosts"
 
     if [[ $SKIP_PASSWD != 1 ]]; then
-        echo "接下来设置 root 密码:"
+        echo "Set the root password now:"
         arch-chroot "$MNT" passwd
     fi
 }
 
 configure_user() {
-    print_title "创建普通用户 ${TARGET_USER}"
+    print_title "Creating user ${TARGET_USER}"
 
     in_chroot "useradd -m -G wheel -s /bin/zsh ${TARGET_USER}"
     in_chroot "sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers"
 
     if [[ $NOPASSWD_SUDO == 1 ]]; then
-        warn "按 NOPASSWD_SUDO=1 为 wheel 组开启了免密 sudo"
+        warn "NOPASSWD_SUDO=1: passwordless sudo for the wheel group has been enabled."
         echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' > "$MNT/etc/sudoers.d/10-wheel-nopasswd"
         chmod 440 "$MNT/etc/sudoers.d/10-wheel-nopasswd"
     fi
@@ -390,47 +406,47 @@ configure_user() {
     in_chroot "visudo -c"
 
     if [[ $SKIP_PASSWD != 1 ]]; then
-        echo "接下来设置 ${TARGET_USER} 的密码:"
+        echo "Set the password for ${TARGET_USER} now:"
         arch-chroot "$MNT" passwd "$TARGET_USER"
     fi
 }
 
 verify_install() {
-    print_title "校验安装结果"
+    print_title "Verifying the installation"
 
-    [[ -f "$MNT/etc/fstab" ]] || die "缺少 /etc/fstab"
-    [[ -f "$MNT/etc/hostname" ]] || die "缺少 /etc/hostname"
-    [[ -f "$MNT/etc/locale.gen" ]] || die "缺少 /etc/locale.gen"
-    [[ -f "$MNT/boot/grub/grub.cfg" ]] || die "缺少 /boot/grub/grub.cfg,引导配置未生成"
-    grep -q 'vmlinuz' "$MNT/boot/grub/grub.cfg" || die "grub.cfg 中没有内核条目"
-    [[ -f "$MNT/boot/vmlinuz-${KERNEL_PKG}" ]] || warn "没有找到 /boot/vmlinuz-${KERNEL_PKG}"
+    [[ -f "$MNT/etc/fstab" ]] || die "Missing /etc/fstab"
+    [[ -f "$MNT/etc/hostname" ]] || die "Missing /etc/hostname"
+    [[ -f "$MNT/etc/locale.gen" ]] || die "Missing /etc/locale.gen"
+    [[ -f "$MNT/boot/grub/grub.cfg" ]] || die "Missing /boot/grub/grub.cfg; the bootloader config was not generated."
+    grep -q 'vmlinuz' "$MNT/boot/grub/grub.cfg" || die "No kernel entry found in grub.cfg."
+    [[ -f "$MNT/boot/vmlinuz-${KERNEL_PKG}" ]] || warn "Kernel image /boot/vmlinuz-${KERNEL_PKG} not found."
 
     if [[ $BOOT_MODE == uefi ]]; then
-        [[ -f "$MNT/boot/EFI/BOOT/BOOTX64.EFI" ]] || die "缺少兜底引导文件 EFI/BOOT/BOOTX64.EFI"
+        [[ -f "$MNT/boot/EFI/BOOT/BOOTX64.EFI" ]] || die "Missing fallback bootloader file EFI/BOOT/BOOTX64.EFI"
     fi
 
     echo
     lsblk -f "$DISK"
     echo
-    echo "grub.cfg 中识别到的启动项:"
+    echo "Boot entries found in grub.cfg:"
     grep -E '^menuentry' "$MNT/boot/grub/grub.cfg" | head -6
 }
 
 finish() {
-    print_title "收尾"
+    print_title "Finishing up"
 
     swapoff "$PART_SWAP" 2>/dev/null || true
-    umount -R "$MNT" || warn "卸载 ${MNT} 时出现问题,请手动检查"
+    umount -R "$MNT" || warn "Unmounting ${MNT} reported problems; please check manually."
 
     cat <<EOF
 
-安装完成。重启前请确认:
-  1) VMware「虚拟机设置 -> CD/DVD」取消勾选「启动时连接」(或移除 ISO);
-  2) 固件启动顺序中硬盘排在光盘之前;
-  3) 若使用 UEFI 固件,确认「启用安全引导」未勾选;
-  4) 执行:  reboot
+Installation finished. Before rebooting, please make sure that:
+  1) In VMware: 'VM Settings -> CD/DVD', uncheck 'Connect at power on' (or remove the ISO);
+  2) In the firmware boot order, the hard disk comes before the CD-ROM;
+  3) If the firmware is UEFI, 'Enable secure boot' is unchecked;
+  4) Then run:  reboot
 
-日志文件: ${LOG_FILE}
+Log file: ${LOG_FILE}
 EOF
     sleep 0.3
 }
