@@ -16,7 +16,11 @@
 #   arch.icekylin.online 的基础安装教程:
 #       1) 一个 Btrfs 分区里用子卷 @ 和 @home 分别承载 / 和 /home(教程默认,
 #          timeshift 只认这种子卷布局)
-#       2) / 和 /home 各自独立分区(共四个分区:ESP、swap、/、/home)
+#          ——注意:这两个子卷共享整个分区,你输入的是「两者合计」的大小;
+#             若确实要给每个子卷一个上限,可以在询问时选 btrfs quota,
+#             脚本会 btrfs quota enable + btrfs qgroup limit 给 @ 和 @home 各设上限
+#       2) / 和 /home 各自独立分区(共四个分区:ESP、swap、/、/home),
+#          这样就能像 /boot 和 swap 一样,分别给 / 和 /home 指定大小
 #       /boot 是 EFI 分区(FAT32,挂载在 /boot),swap 默认取内存的 60%
 #
 #   也可以用环境变量跳过菜单(适合脚本化/无人值守):
@@ -41,6 +45,18 @@
 #   BOOT_SIZE_MIB=512     ESP 大小;SWAP_SIZE_MIB=8192 swap 大小(0=不建)
 #   ROOT_SIZE_MIB=51200   / 大小;HOME_SIZE_MIB=131072  /home 大小(仅 split)
 #   BTRFS_COMPRESS=zstd   透明压缩,置空则关闭
+#
+#  ── 双系统推荐布局(同一块盘,保留 Windows)─────────────────────────────────
+#   复用 Windows 的 ESP(不格式化),在空闲空间里再切四块:
+#       /boot    1G    ext4   —— 内核与 initramfs 单独放这里
+#       /       60G    btrfs  子卷 @
+#       /home   40G    btrfs  子卷 @home
+#       swap     8G    —— 建议不小于内存的 60%
+#   然后在选项 3 里依次指定这四块即可(见下面的交互顺序)。
+#   为什么推荐单独切 /boot:GRUB 读内核和 grub.cfg 时只碰 ext4,完全不用解析
+#   带 zstd 压缩的 Btrfs,兼容性最好;Windows 那块 260M 的小 ESP 也不会被塞满。
+#   注意:MBR(msdos)分区表最多 4 个主分区;若 Windows 已占满 4 个,新建的 Linux
+#   分区需要建成扩展分区里的逻辑分区(用 gparted / cfdisk 操作即可,脚本不关心)。
 #
 #  ── 运行中的交互(都可用环境变量预先给出以跳过)────────────────────────────
 #   1) 分区布局(Btrfs 子卷 / 两个独立分区)
@@ -89,6 +105,8 @@ BOOT_SIZE_MIB="${BOOT_SIZE_MIB:-}"                  # ESP(/boot)大小,留空则
 SWAP_SIZE_MIB="${SWAP_SIZE_MIB:-}"                  # swap 大小,留空则询问;0 = 不建 swap
 ROOT_SIZE_MIB="${ROOT_SIZE_MIB:-}"                  # / 大小,留空则询问
 HOME_SIZE_MIB="${HOME_SIZE_MIB:-}"                  # /home 独立分区大小(仅 split 布局)
+ROOT_QUOTA_MIB="${ROOT_QUOTA_MIB:-}"                # 可选:子卷 @ 的 qgroup 上限(仅 subvol 布局)
+HOME_QUOTA_MIB="${HOME_QUOTA_MIB:-}"                # 可选:子卷 @home 的 qgroup 上限(仅 subvol 布局)
 BTRFS_COMPRESS="${BTRFS_COMPRESS:-zstd}"            # Btrfs 透明压缩,置空则不启用
 BOOTLOADER_ID="${BOOTLOADER_ID:-ARCH}"              # 与教程一致
 GRUB_CMDLINE="${GRUB_CMDLINE:-loglevel=5 nowatchdog}"   # 教程推荐的 GRUB 内核参数
@@ -490,9 +508,13 @@ ask_layout_and_sizes() {
 
     local ans
     if [[ -z $LAYOUT ]]; then
-        echo "How should / and /home be laid out?"
+        echo "How should / and /home be laid out? NOTE: they cannot share one Btrfs"
+        echo "partition and have separate fixed sizes - pick 2 if you want that."
         echo "  1) one Btrfs partition with subvolumes @ and @home   (guide default)"
-        echo "  2) two separate Btrfs partitions for / and /home     (four partitions in total)"
+        echo "     / and /home SHARE this partition; the size you type below is the"
+        echo "     total for both of them (optionally capped with btrfs quota later)"
+        echo "  2) two separate Btrfs partitions for / and /home     (four partitions)"
+        echo "     you give / and /home their own sizes, just like /boot and swap"
         echo
         while true; do
             read -r -p "Type 1 or 2 [1]: " ans || die "Aborted."
@@ -525,9 +547,24 @@ ask_layout_and_sizes() {
 
     if [[ $LAYOUT == subvol ]]; then
         if [[ -z $ROOT_SIZE_MIB ]]; then
-            ROOT_SIZE_MIB="$(ask_size "Btrfs partition size (holds / and /home)" "$rest" "$rest")"
+            ROOT_SIZE_MIB="$(ask_size "Btrfs partition size (TOTAL for / and /home)" "$rest" "$rest")"
         fi
         HOME_SIZE_MIB=0
+        # 可选:用 btrfs qgroup 给两个子卷各设一个上限(默认不设,共享整个分区)
+        if [[ -z $ROOT_QUOTA_MIB && -z $HOME_QUOTA_MIB && $AUTO_CONFIRM != 1 ]]; then
+            echo
+            echo "  / and /home share all $(mib_human "$ROOT_SIZE_MIB") of this partition."
+            echo "  You can either leave it shared (default), or put a size cap on each"
+            echo "  subvolume with btrfs quota."
+            local q
+            read -r -p "  Cap / and /home individually with btrfs quota? [y/N]: " q || die "Aborted."
+            case "${q,,}" in
+            y | yes)
+                ROOT_QUOTA_MIB="$(ask_size "  size cap for /" "$((ROOT_SIZE_MIB / 2))" "$ROOT_SIZE_MIB")"
+                HOME_QUOTA_MIB="$(ask_size "  size cap for /home" "$((ROOT_SIZE_MIB - ROOT_QUOTA_MIB))" "$((ROOT_SIZE_MIB - ROOT_QUOTA_MIB))")"
+                ;;
+            esac
+        fi
     else
         local root_default
         if ((rest >= 262144)); then
@@ -556,6 +593,11 @@ ask_layout_and_sizes() {
         echo "  /home          $(mib_human "$HOME_SIZE_MIB")   ${FS_TYPE}, subvol @home"
     else
         echo "  / + /home      $(mib_human "$ROOT_SIZE_MIB")   ${FS_TYPE}, one partition with subvols @ and @home"
+        if [[ -n $ROOT_QUOTA_MIB || -n $HOME_QUOTA_MIB ]]; then
+            echo "                 quota caps: / = $(mib_human "${ROOT_QUOTA_MIB:-0}"), /home = $(mib_human "${HOME_QUOTA_MIB:-0}")"
+        else
+            echo "                 no per-subvolume cap: / and /home share the whole partition"
+        fi
     fi
     echo
 }
@@ -979,6 +1021,29 @@ make_linux_fs() {
             for sv in $subvols; do
                 btrfs subvolume create "$MNT/$sv"
             done
+
+            # 可选:给子卷设 qgroup 上限(只有用户显式要求时才做)
+            local quota_needed=0
+            for sv in $subvols; do
+                if [[ $sv == "@" && -n $ROOT_QUOTA_MIB ]]; then
+                    quota_needed=1
+                fi
+                if [[ $sv == "@home" && -n $HOME_QUOTA_MIB ]]; then
+                    quota_needed=1
+                fi
+            done
+            if [[ $quota_needed == 1 ]]; then
+                btrfs quota enable "$MNT"
+                for sv in $subvols; do
+                    if [[ $sv == "@" && -n $ROOT_QUOTA_MIB ]]; then
+                        btrfs qgroup limit "${ROOT_QUOTA_MIB}M" "$MNT/@"
+                    fi
+                    if [[ $sv == "@home" && -n $HOME_QUOTA_MIB ]]; then
+                        btrfs qgroup limit "${HOME_QUOTA_MIB}M" "$MNT/@home"
+                    fi
+                done
+            fi
+
             umount "$MNT"
         fi
     else
@@ -1007,6 +1072,22 @@ format_partitions() {
     fi
 
     if [[ $INSTALL_MODE == alongside ]]; then
+        # /boot 单独分区时:并存场景下它通常是新切出来的分区,默认格式化
+        # (统一用 ext4,这样 GRUB 读内核和 grub.cfg 完全不用碰 Btrfs 及其压缩)
+        local format_boot=0
+        if [[ -n $BOOT_PART ]]; then
+            if [[ $AUTO_CONFIRM == 1 ]]; then
+                format_boot="${FORMAT_BOOT:-1}"
+            else
+                local b
+                read -r -p "Format the separate /boot partition ${BOOT_PART} as ext4? [Y/n]: " b || die "Aborted."
+                case "${b,,}" in
+                n | no) format_boot=0 ;;
+                *) format_boot=1 ;;
+                esac
+            fi
+        fi
+
         echo "Partitions that WILL be formatted (all data on them is lost):"
         echo "  root : ${ROOT_PART}   (${FS_TYPE})"
         if [[ -n $HOME_PART ]]; then
@@ -1015,12 +1096,15 @@ format_partitions() {
         if [[ -n $SWAP_PART ]]; then
             echo "  swap : ${SWAP_PART}"
         fi
+        if [[ -n $BOOT_PART && $format_boot == 1 ]]; then
+            echo "  boot : ${BOOT_PART}   (ext4)"
+        fi
         echo "Partitions that will NOT be touched:"
         if [[ $BOOT_MODE == uefi ]]; then
-            echo "  ESP  : ${EFI_PART}  (shared with Windows)"
+            echo "  ESP  : ${EFI_PART}  (shared with Windows; only EFI/${BOOTLOADER_ID} is added)"
         fi
-        if [[ -n $BOOT_PART ]]; then
-            echo "  boot : ${BOOT_PART}"
+        if [[ -n $BOOT_PART && $format_boot != 1 ]]; then
+            echo "  boot : ${BOOT_PART}  (kept as is)"
         fi
         echo
 
@@ -1055,6 +1139,11 @@ format_partitions() {
         if [[ -n $SWAP_PART ]]; then
             wipefs -a "$SWAP_PART" >/dev/null 2>&1 || true
             mkswap -L swap "$SWAP_PART"
+        fi
+
+        if [[ -n $BOOT_PART && $format_boot == 1 ]]; then
+            wipefs -a "$BOOT_PART" >/dev/null 2>&1 || true
+            mkfs.ext4 -F -L boot "$BOOT_PART"
         fi
         return
     fi
@@ -1279,6 +1368,9 @@ configure_bootloader() {
         in_chroot "pacman -S --noconfirm --needed os-prober ntfs-3g"
         in_chroot "sed -i 's/^#GRUB_DISABLE_OS_PROBER=.*/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub"
         in_chroot "grep -q '^GRUB_DISABLE_OS_PROBER=false' /etc/default/grub || echo 'GRUB_DISABLE_OS_PROBER=false' >> /etc/default/grub"
+        # 先单独跑一次 os-prober,把它的输出打出来,便于判断有没有识别到 Windows
+        echo "Looking for other operating systems (os-prober):"
+        in_chroot "os-prober" || warn "os-prober returned a non-zero status."
     fi
 
     if [[ $INSTALL_MODE == alongside ]]; then
@@ -1296,11 +1388,6 @@ configure_bootloader() {
 
         tune_grub_defaults
         in_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
-
-        if [[ $DUAL_BOOT == 1 ]] && ! grep -qi 'windows' "$MNT/boot/grub/grub.cfg"; then
-            warn "os-prober did not find a Windows entry in grub.cfg."
-            warn "Windows is still bootable from the firmware boot menu (Windows Boot Manager), or you can add an entry manually."
-        fi
         return
     fi
 
@@ -1329,6 +1416,14 @@ configure_bootloader() {
         in_chroot "grub-install --target=i386-pc --recheck ${DISK}"
         tune_grub_defaults
         in_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
+    fi
+
+    # 双系统:确认 Windows 条目真的进了 grub.cfg
+    if [[ $DUAL_BOOT == 1 ]] && ! grep -qi 'windows' "$MNT/boot/grub/grub.cfg"; then
+        warn "os-prober did not find a Windows entry in grub.cfg."
+        warn "This is a known limitation of running os-prober inside a chroot."
+        warn "After the first boot into Arch, run:  sudo os-prober && sudo grub-mkconfig -o /boot/grub/grub.cfg"
+        warn "Windows also stays bootable from the firmware boot menu (Windows Boot Manager)."
     fi
 }
 
@@ -1392,6 +1487,11 @@ verify_install() {
         grep -q 'subvol=/@' "$MNT/etc/fstab" || warn "No 'subvol=/@' entry in /etc/fstab; check the mount options."
         if [[ -d "$MNT/home" ]]; then
             mountpoint -q "$MNT/home" || warn "/home is not a separate mount point (it will just be a directory on /)."
+        fi
+        if [[ -n $ROOT_QUOTA_MIB || -n $HOME_QUOTA_MIB ]]; then
+            echo
+            echo "btrfs quota limits:"
+            in_chroot "btrfs qgroup show -reF /" 2>/dev/null | sed 's/^/  /' || true
         fi
     fi
 
