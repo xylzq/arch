@@ -1,6 +1,7 @@
 # archlinux setup script
 
 关于arch安装的一个脚本
+其中，arch-install.sh为更新后版本，更稳定智能，Dual-system_install.sh为双系统情况下安装脚本
 
 ### Download
 ```
